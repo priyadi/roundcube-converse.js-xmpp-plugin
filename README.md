@@ -6,7 +6,7 @@ much a work in progress.
 
 Requirements
 ------------
-* An XMPP server with the same credentials as IMAP server used by Roundcube.
+* An XMPP server with the same credentials as IMAP server used by Roundcube. This also means the IMAP server must accept full email address as login username.
 * BOSH support in XMPP server or BOSH connection manager
 * Plaintext auth in BOSH
 * (optional) BOSH proxy in web server, to avoid crossdomain issues

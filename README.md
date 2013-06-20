@@ -7,7 +7,9 @@ much a work in progress.
 Requirements
 ------------
 * An XMPP server with the same credentials as IMAP server used by Roundcube.
-* BOSH server
+* BOSH support in XMPP server or BOSH connection manager
+* Plaintext auth in BOSH
+* (optional) BOSH proxy in web server, to avoid crossdomain issues
 
 Installation
 ------------
@@ -16,7 +18,7 @@ Installation
 * cd converse
 * git submodule init && git submodule update
 * cd your_roundcube_dir/
-* vi config/main.inc.php (add 'converse' to $rcmail_config['plugins']
+* vi config/main.inc.php (add 'converse' to $rcmail_config['plugins'])
 
 Credits
 -------

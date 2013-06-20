@@ -7,10 +7,12 @@ class XmppPrebindSession {
 	private $hostname;
 	private $username;
 	private $password;
+	private $bosh;
 
-	function __construct($hostname, $username, $password) {
+	function __construct($bosh, $hostname, $username, $password) {
 		if(($atpos = strpos($username, '@')) !== FALSE)
 			list($username, $hostname) = preg_split('/@/', $username);
+		$this->bosh = $bosh;
 		$this->hostname = $hostname;
 		$this->username = $username;
 		$this->password = $password;
@@ -53,7 +55,7 @@ class XmppPrebindSession {
 	}
 
 	function fetch_ids() {
-		if($bosh_xml_result = $this->send_request('http://localhost:5280/http-bind')) {
+		if($bosh_xml_result = $this->send_request($this->bosh)) {
 			if($xml_result = simplexml_load_string($bosh_xml_result)) {
 				$this->jid = (string)$xml_result->iq->bind->jid[0];
 				$this->sid = (string)$xml_result->attributes()->sid[0];
@@ -66,6 +68,7 @@ class XmppPrebindSession {
 
 class converse extends rcube_plugin {
 	function init() {
+		$this->load_config();
 		$this->add_hook('render_page', array($this, 'render_page'));
 		$this->add_hook('authenticate', array($this, 'authenticate'));
 	}
@@ -75,7 +78,7 @@ class converse extends rcube_plugin {
 			return;
 		}
 		$args = $_SESSION['xmpp'];
-		$xsess = new XmppPrebindSession($args['host'], $args['user'], $args['pass']);
+		$xsess = new XmppPrebindSession($args['bosh_prebind_url'], $args['host'], $args['user'], $args['pass']);
 		if(!$xsess->fetch_ids()) {
 			unset($_SESSION['xmpp']);
 			return;
@@ -116,7 +119,7 @@ class converse extends rcube_plugin {
 					hide_muc_server: false,
 				});
 				$("#chatpanel").ready(function () { 
-					var connection = new Strophe.Connection("/http-bind");
+					var connection = new Strophe.Connection('.json_serialize($args['bosh_url']).');
 					connection.attach(
 						'.json_serialize($xsess->jid).',
 						'.json_serialize($xsess->sid).',
@@ -128,7 +131,7 @@ class converse extends rcube_plugin {
 							{
 								converse.onConnected(connection);
 							} else {
-								// print error message to roundcube here
+								// TODO: print error message to roundcube here
 								$("$chatpanel").remove();
 							}
 						}
@@ -138,7 +141,20 @@ class converse extends rcube_plugin {
 	}
 
 	function authenticate($args) {
-		$_SESSION['xmpp'] = $args;
+		$rcmail = rcmail::get_instance();
+		$func_bosh_prebind_url = $rcmail->config->get('converse_xmpp_bosh_prebind_url');
+		$func_bosh_url = $rcmail->config->get('converse_xmpp_bosh_url');
+		$func_hostname = $rcmail->config->get('converse_xmpp_hostname');
+		$func_username = $rcmail->config->get('converse_xmpp_username');
+		$func_password = $rcmail->config->get('converse_xmpp_password');
+		$xmppargs = array(
+			'bosh_prebind_url' => $func_bosh_prebind_url($args),
+			'bosh_url' => $func_bosh_url($args),
+			'host' => $func_hostname($args),
+			'user' => $func_username($args),
+			'pass' => $func_password($args),
+		);
+		$_SESSION['xmpp'] = $xmppargs;
 		return $args;
 	}
 }

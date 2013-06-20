@@ -6,14 +6,10 @@ much a work in progress.
 
 Requirements
 ------------
-* An XMPP server with the same credentials as IMAP server used by Roundcube. This also means the IMAP server must accept full email address as login username.
 * BOSH support in XMPP server or BOSH connection manager
-* Plaintext auth in BOSH
+* Plaintext auth in BOSH. This currently doesn't support other auth methods
 * (optional) BOSH proxy in web server, to avoid crossdomain issues
 * (recommended) XMPP server set to broadcast incoming messages to all resources. See notes below.
-
-Currently the BOSH endpoint is hardcoded at '/http-bind'. This will be made
-configurable later.
 
 Installation
 ------------
@@ -21,6 +17,7 @@ Installation
 * git clone https://github.com/priyadi/roundcube-converse.js-xmpp-plugin converse
 * cd converse
 * git submodule init && git submodule update
+* vi config.inc.php (make necessary adjustments)
 * cd your_roundcube_dir/
 * vi config/main.inc.php (add 'converse' to $rcmail_config['plugins'])
 * done!
@@ -39,4 +36,4 @@ Credits
 -------
 * Some code is stolen from https://gist.github.com/Zash/3681653
 * [Converse.js](http://conversejs.org)
-* This work is sponsored by indoglobal.com
+* This work is sponsored by [indoglobal.com](http://indoglobal.com)

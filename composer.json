@@ -2,7 +2,7 @@
 	"name": "priyadi/converse",
 	"type": "roundcube-plugin",
 	"description": "XMPP plugin for Roundcube based on Converse.js",
-	"keywords": ["xmpp", "chat", "im"],
+	"keywords": ["xmpp", "chat", "im", "jabber"],
 	"homepage": "https://github.com/priyadi/roundcube-converse.js-xmpp-plugin",
 	"license": "MIT",
 	"authors": [

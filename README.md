@@ -27,9 +27,10 @@ Installation
 
 Notes
 -----
-This plugin create a new XMPP session on each page rendering in onder to support
-multiple active window. To avoid confusion it is recommended to have the
-XMPP server broadcast incoming messages to all resources.
+
+This plugin creates a new XMPP session on each page rendering in order to
+support multiple active window. To avoid confusion it is recommended to have
+the XMPP server broadcast incoming messages to all resources.
 
 * Openfire: "route.all-resources: true"
 * Prosody: "ignore_presence_priority = true"

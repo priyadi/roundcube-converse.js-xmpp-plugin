@@ -74,6 +74,18 @@ class converse extends rcube_plugin {
 	}
 
 	function render_page($event) {
+		$rcmail = rcube::get_instance();
+		switch($rcmail->task) {
+			case 'mail':
+			case 'addressbook':
+			case 'settings':
+				break;
+			default:
+				return;
+		}
+		if (isset($_GET['_framed']) || isset($_POST['_framed'])) {
+			return;
+		}
 		if (!isset($_SESSION['xmpp'])) {
 			return;
 		}

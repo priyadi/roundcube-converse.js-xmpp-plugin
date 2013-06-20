@@ -14,8 +14,6 @@ class XmppPrebindSession {
 		$this->hostname = $hostname;
 		$this->username = $username;
 		$this->password = $password;
-
-
 		$this->rid = rand(0x1000, 0xfffffff);
 	}
 
@@ -67,16 +65,21 @@ class XmppPrebindSession {
 }
 
 class converse extends rcube_plugin {
-	//public $task = 'login'; // Huh?
-
 	function init() {
 		$this->add_hook('render_page', array($this, 'render_page'));
 		$this->add_hook('authenticate', array($this, 'authenticate'));
-		#$this->register_action('plugin.getxmppcred', array($this, 'get_xmpp_cred'));
 	}
 
 	function render_page($event) {
-		global $OUTPUT;
+		if (!isset($_SESSION['xmpp'])) {
+			return;
+		}
+		$args = $_SESSION['xmpp'];
+		$xsess = new XmppPrebindSession($args['host'], $args['user'], $args['pass']);
+		if(!$xsess->fetch_ids()) {
+			unset($_SESSION['xmpp']);
+			return;
+		}
 		$rcmail = rcmail::get_instance();
 		$this->include_script('converse.js/Libraries/strophe.js');
 		$this->include_script('converse.js/Libraries/strophe.roster.js');
@@ -92,57 +95,50 @@ class converse extends rcube_plugin {
 
 		$this->include_stylesheet('converse.js/converse.0.3.min.css');
 
-		if(isset($_SESSION['xmpp']['jid'])) {
-			$this->api->output->add_footer('
-				<div id="chatpanel">
-					<div id="collective-xmpp-chat-data"></div>
-					<div id="toggle-controlbox">
-						<a href="#" class="chat toggle-online-users">
-							<strong class="conn-feedback">Toggle chat</strong> <strong style="display: none" id="online-count">(0)</strong>
-						</a>
-					</div>
+		$this->api->output->add_footer('
+			<div id="chatpanel">
+				<div id="collective-xmpp-chat-data"></div>
+				<div id="toggle-controlbox">
+					<a href="#" class="chat toggle-online-users">
+						<strong class="conn-feedback">Toggle chat</strong> <strong style="display: none" id="online-count">(0)</strong>
+					</a>
 				</div>
-			');
+			</div>
+		');
 
-			$rcmail->output->add_script('
-					converse.initialize({
-						animate: true,
-						prebind: true,
-						//bosh_service_url: "/http-bind",
-						xhr_user_search: false,
-						auto_subscribe: false,
-						auto_list_rooms: false,
-						hide_muc_server: false,
-					});
-					$("#chatpanel").ready(function () { 
-						var connection = new Strophe.Connection("/http-bind");
-						connection.attach(
-							'.json_serialize($_SESSION['xmpp']['jid']).',
-							'.json_serialize($_SESSION['xmpp']['sid']).',
-							'.json_serialize($_SESSION['xmpp']['rid']).'
-							,
-							function (status) {
-								if ((status === Strophe.Status.ATTACHED)
-									|| (status === Strophe.Status.CONNECTED))
-								{
-									converse.onConnected(connection);
-								} else {
-									// 
-								}
+		$rcmail->output->add_script('
+				converse.initialize({
+					animate: true,
+					prebind: true,
+					xhr_user_search: false,
+					auto_subscribe: false,
+					auto_list_rooms: false,
+					hide_muc_server: false,
+				});
+				$("#chatpanel").ready(function () { 
+					var connection = new Strophe.Connection("/http-bind");
+					connection.attach(
+						'.json_serialize($xsess->jid).',
+						'.json_serialize($xsess->sid).',
+						'.json_serialize($xsess->rid).'
+						,
+						function (status) {
+							if ((status === Strophe.Status.ATTACHED)
+								|| (status === Strophe.Status.CONNECTED))
+							{
+								converse.onConnected(connection);
+							} else {
+								// print error message to roundcube here
+								$("$chatpanel").remove();
 							}
-						);
-					})
-			', 'foot');
-		}
+						}
+					);
+				})
+		', 'foot');
 	}
 
 	function authenticate($args) {
-		$xsess = new XmppPrebindSession($args['host'], $args['user'], $args['pass']);
-		if($xsess->fetch_ids()) {
-			$_SESSION['xmpp'] = array('jid' => $xsess->jid, 'sid' => $xsess->sid, 'rid' => $xsess->rid);
-		} else {
-			unset($_SESSION['xmpp']);
-		}
+		$_SESSION['xmpp'] = $args;
 		return $args;
 	}
 }

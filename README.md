@@ -10,6 +10,7 @@ Requirements
 * BOSH support in XMPP server or BOSH connection manager
 * Plaintext auth in BOSH
 * (optional) BOSH proxy in web server, to avoid crossdomain issues
+* (recommended) XMPP server set to broadcast incoming messages to all resources ("route.all-resources: true" in Openfire, "ignore_presence_priority = true" in Prosody)
 
 Currently the BOSH endpoint is hardcoded at '/http-bind'. This will be made
 configurable later.

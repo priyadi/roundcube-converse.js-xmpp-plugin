@@ -11,6 +11,9 @@ Requirements
 * Plaintext auth in BOSH
 * (optional) BOSH proxy in web server, to avoid crossdomain issues
 
+Currently the BOSH endpoint is hardcoded at '/http-bind'. This will be made
+configurable later.
+
 Installation
 ------------
 * cd your_roundcube_dir/plugins
@@ -19,6 +22,7 @@ Installation
 * git submodule init && git submodule update
 * cd your_roundcube_dir/
 * vi config/main.inc.php (add 'converse' to $rcmail_config['plugins'])
+* done!
 
 Credits
 -------

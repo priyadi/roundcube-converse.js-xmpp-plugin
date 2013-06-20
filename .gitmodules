@@ -1,0 +1,3 @@
+[submodule "converse.js"]
+	path = converse.js
+	url = https://github.com/jcbrand/converse.js

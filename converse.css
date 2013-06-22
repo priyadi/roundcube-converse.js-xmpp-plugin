@@ -1,0 +1,100 @@
+#chatpanel {
+	font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif !important;
+	font-size: 11px !important;
+}
+
+#chatpanel input, #chatpanel textarea {
+	font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif !important;
+	font-size: 11px !important;
+}
+
+#chatpanel .add-xmpp-contact input {
+	width: 92%;
+}
+
+#chatpanel .chat-textarea {
+	width: 180px;
+	resize: none;
+	border-style: none;
+	border-color: transparent;
+	overflow: auto;
+}
+
+#chatpanel a.open-chat {
+	font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif !important;
+	font-size: 11px;
+	color: #333;
+	font-weight: normal;
+	vertical-align: top;
+	text-decoration: none;
+	padding-top: 1px;
+	padding-bottom: 6px;
+	padding-left: 5px;
+}
+
+#converse-roster {
+	height: 196px;
+}
+
+.oc-chat-content {
+	height: 255px;
+}
+
+#converse-roster div.chat-head {
+	
+}
+
+form.set-xmpp-status {
+	padding: 0 0 .5em .5em !important;
+}
+
+div.chat-title {
+	line-height: normal;
+	font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif !important;
+	font-size: 11px !important;
+	font-weight: normal;
+	height: auto;
+	text-decoration: none;
+}
+
+a.user {
+	text-decoration: none;
+}
+
+ul#controlbox-tabs li {
+	width: 33% !important;
+}
+
+ul#controlbox-tabs li a {
+	font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif !important;
+	font-size: 11px !important;
+}
+
+.participants ul.participant-list li {
+	font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif !important;
+	font-size: 11px !important;
+}
+
+.chat-content {
+	font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif !important;
+	font-size: 11px !important;
+}
+
+a.configure-chatroom-button,
+a.close-chatbox-button,
+.chatroom-form,
+.chat-body p,
+.chatroom-form legend,
+#available-chatrooms dt,
+#converse-roster dt,
+.room-info,
+.chat-head #controlbox-tabs,
+ul#controlbox-tabs li a,
+div#users,
+div#chatrooms,
+div#login-dialog,
+div#settings
+{
+	font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif !important;
+	font-size: 11px !important;
+}

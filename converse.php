@@ -109,6 +109,7 @@ class converse extends rcube_plugin {
 		$this->include_script('converse.js/converse.js');
 
 		$this->include_stylesheet('converse.js/converse.0.3.min.css');
+		$this->include_stylesheet('converse.css');
 
 		$this->api->output->add_footer('
 			<div id="chatpanel">

@@ -98,3 +98,28 @@ div#settings
 	font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif !important;
 	font-size: 11px !important;
 }
+
+.available-chatroom {
+	margin-left: 0 !important;
+}
+
+.available-chatroom a.room-info {
+	text-decoration: none;
+}
+
+#available-chatrooms {
+	margin: 0;
+}
+
+.participant-list {
+	margin: 0;
+	padding: 0;
+}
+
+.chat {
+	font-size: 12px;
+}
+
+#toggle-controlbox {
+	font-size: 12px;
+}

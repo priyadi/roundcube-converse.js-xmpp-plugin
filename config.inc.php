@@ -8,6 +8,7 @@
 // this must be an absolute URL
 $rcmail_config['converse_xmpp_bosh_prebind_url']= function($args) {
 	return 'http://localhost:5280/http-bind';
+	# return sprintf('http://%s/http-bind', $_SERVER['HTTP_HOST']);
 	# return sprintf('http://%s/http-bind', $args['host']);
 };
 

@@ -100,7 +100,6 @@ class XmppPrebindSession {
 	function fetch_ids() {
 		if($bosh_xml_result = $this->send_request($this->bosh, $this->get_request_xml_bind())) {
 			if($xml_result = simplexml_load_string($bosh_xml_result)) {
-				trigger_error((string)$xml_result->iq->bind->jid[0]);
 				$this->jid = (string)$xml_result->iq->bind->jid[0];
 				$this->rid++;
 				return true;

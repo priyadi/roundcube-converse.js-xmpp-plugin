@@ -20,7 +20,7 @@ class XmppPrebindSession {
 	}
 
 	function get_auth_blob() {
-		return base64_encode("{$this->username}@{$this->hostname}\0{$this->username}\0{$this->password}");
+		return base64_encode("\0{$this->username}@{$this->hostname}\0{$this->password}");
 	}
 
 	function get_request_xml_auth() {

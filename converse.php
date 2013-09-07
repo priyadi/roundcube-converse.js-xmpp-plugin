@@ -87,10 +87,16 @@ class XmppPrebindSession {
 		} else {
 			return false;
 		}
+		
 		if($bosh_xml_result = $this->send_request($this->bosh, $this->get_request_xml_auth())) {
 			if($xml_result = simplexml_load_string($bosh_xml_result)) {
-				$this->rid++;
-				return true;
+				if ($xml_result->success){
+					$this->rid++;
+					return true;
+				} else {
+					trigger_error("XMPP Login failed for ". $this->username);
+					return false;
+				}
 			}
 		}
 
@@ -100,6 +106,10 @@ class XmppPrebindSession {
 	function fetch_ids() {
 		if($bosh_xml_result = $this->send_request($this->bosh, $this->get_request_xml_bind())) {
 			if($xml_result = simplexml_load_string($bosh_xml_result)) {
+				if (!isset($xml_result->iq->bind->jid[0])){
+					trigger_error("No JID returned for " . $this->username);
+					return false;
+				}
 				$this->jid = (string)$xml_result->iq->bind->jid[0];
 				$this->rid++;
 				return true;
@@ -133,8 +143,12 @@ class converse extends rcube_plugin {
 		}
 		$args = $_SESSION['xmpp'];
 		$xsess = new XmppPrebindSession($args['bosh_prebind_url'], $args['host'], $args['user'], $args['pass']);
-		$xsess->init_connection();
-		if(!$xsess->fetch_ids()) {
+		if($xsess->init_connection()){
+			if (!$xsess->fetch_ids()) {
+				unset($_SESSION['xmpp']);
+				return;
+			}
+		} else {
 			unset($_SESSION['xmpp']);
 			return;
 		}

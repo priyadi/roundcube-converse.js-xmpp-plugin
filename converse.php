@@ -39,7 +39,7 @@ class XmppPrebindSession {
 
 	function get_request_xml_bind() {
 		$bosh_xml = simplexml_load_string('<?xml version="1.0"?>'.
-		'<body xmlns="http://jabber.org/protocol/httpbind" '.
+		'<body xmlns="http://jabber.org/protocol/httpbind" xmpp:restart="true" '.
 				'xmlns:xmpp="urn:xmpp:xbosh" xml:lang="en" wait="60" hold="1" '.
 				'content="text/xml; charset=utf-8" ver="1.6" xmpp:version="1.0">'.
 			'<iq xmlns="jabber:client" type="set" id="bind">'.

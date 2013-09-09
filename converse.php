@@ -20,28 +20,50 @@ class XmppPrebindSession {
 	}
 
 	function get_auth_blob() {
-		return base64_encode("\0{$this->username}\0{$this->password}");
+		return base64_encode("\0{$this->username}@{$this->hostname}\0{$this->password}");
 	}
 
-	function get_request_xml() {
+	function get_request_xml_auth() {
 		$bosh_xml = simplexml_load_string('<?xml version="1.0"?>'.
 		'<body xmlns="http://jabber.org/protocol/httpbind" '.
 				'xmlns:xmpp="urn:xmpp:xbosh" xml:lang="en" wait="60" hold="1" '.
 				'content="text/xml; charset=utf-8" ver="1.6" xmpp:version="1.0">'.
 			'<auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl" mechanism="PLAIN"/>'.
-			'<iq xmlns="jabber:client" type="set" id="bind">'.
-				'<bind xmlns="urn:ietf:params:xml:ns:xmpp-bind"/>'.
-			'</iq>'.
-			// '<presence xmlns="jabber:client"/>'.
 		'</body>');
 		$bosh_xml->addAttribute('rid', $this->rid);
+		$bosh_xml->addAttribute('sid', $this->sid);
 		$bosh_xml->addAttribute('to', $this->hostname);
 		$bosh_xml->auth = $this->get_auth_blob();
 		return $bosh_xml->asXML();
 	}
 
-	function send_request($bosh_path) {
-		$bosh_xml = $this->get_request_xml();
+	function get_request_xml_bind() {
+		$bosh_xml = simplexml_load_string('<?xml version="1.0"?>'.
+		'<body xmlns="http://jabber.org/protocol/httpbind" xmpp:restart="true" '.
+				'xmlns:xmpp="urn:xmpp:xbosh" xml:lang="en" wait="60" hold="1" '.
+				'content="text/xml; charset=utf-8" ver="1.6" xmpp:version="1.0">'.
+			'<iq xmlns="jabber:client" type="set" id="bind">'.
+				'<bind xmlns="urn:ietf:params:xml:ns:xmpp-bind"/>'.
+			'</iq>'.
+		'</body>');
+		$bosh_xml->addAttribute('rid', $this->rid);
+		$bosh_xml->addAttribute('sid', $this->sid);
+		$bosh_xml->addAttribute('to', $this->hostname);
+		return $bosh_xml->asXML();
+	}
+
+	function get_request_xml_init() {
+		$bosh_xml = simplexml_load_string('<?xml version="1.0"?>'.
+		'<body xmlns="http://jabber.org/protocol/httpbind" '.
+				'xmlns:xmpp="urn:xmpp:xbosh" xml:lang="en" wait="60" hold="1" '.
+				'content="text/xml; charset=utf-8" ver="1.6" xmpp:version="1.0">'.
+		'</body>');
+		$bosh_xml->addAttribute('rid', $this->rid);
+		$bosh_xml->addAttribute('to', $this->hostname);
+		return $bosh_xml->asXML();
+	}
+
+	function send_request($bosh_path, $bosh_xml) {
 		if($ch = curl_init()) {
 			curl_setopt_array($ch, array(
 				CURLOPT_URL => $bosh_path,
@@ -54,11 +76,41 @@ class XmppPrebindSession {
 		}
 	}
 
-	function fetch_ids() {
-		if($bosh_xml_result = $this->send_request($this->bosh)) {
+	function init_connection(){
+		if ($bosh_xml_result = $this->send_request($this->bosh, $this->get_request_xml_init())) {
 			if($xml_result = simplexml_load_string($bosh_xml_result)) {
-				$this->jid = (string)$xml_result->iq->bind->jid[0];
 				$this->sid = (string)$xml_result->attributes()->sid[0];
+				$this->rid++;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		
+		if($bosh_xml_result = $this->send_request($this->bosh, $this->get_request_xml_auth())) {
+			if($xml_result = simplexml_load_string($bosh_xml_result)) {
+				if ($xml_result->success){
+					$this->rid++;
+					return true;
+				} else {
+					trigger_error("XMPP Login failed for ". $this->username);
+					return false;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	function fetch_ids() {
+		if($bosh_xml_result = $this->send_request($this->bosh, $this->get_request_xml_bind())) {
+			if($xml_result = simplexml_load_string($bosh_xml_result)) {
+				if (!isset($xml_result->iq->bind->jid[0])){
+					trigger_error("No JID returned for " . $this->username);
+					return false;
+				}
+				$this->jid = (string)$xml_result->iq->bind->jid[0];
 				$this->rid++;
 				return true;
 			}
@@ -91,7 +143,12 @@ class converse extends rcube_plugin {
 		}
 		$args = $_SESSION['xmpp'];
 		$xsess = new XmppPrebindSession($args['bosh_prebind_url'], $args['host'], $args['user'], $args['pass']);
-		if(!$xsess->fetch_ids()) {
+		if($xsess->init_connection()){
+			if (!$xsess->fetch_ids()) {
+				unset($_SESSION['xmpp']);
+				return;
+			}
+		} else {
 			unset($_SESSION['xmpp']);
 			return;
 		}
@@ -128,8 +185,8 @@ class converse extends rcube_plugin {
 					prebind: true,
 					xhr_user_search: false,
 					auto_subscribe: false,
-					auto_list_rooms: false,
-					hide_muc_server: false,
+					auto_list_rooms: true,
+					hide_muc_server: true,
 				});
 				$("#chatpanel").ready(function () { 
 					var connection = new Strophe.Connection('.json_serialize($args['bosh_url']).');

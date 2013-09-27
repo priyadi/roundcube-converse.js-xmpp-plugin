@@ -45,7 +45,7 @@ class converse extends rcube_plugin
 		$rcmail = rcube::get_instance();
 
 		// TODO: exclude some more actions
-		if ($rcmail->task == 'login')
+		if ($rcmail->task == 'login' || !empty($_REQUEST['_extwin']))
 			return;
 
 		$lang = 'de';

@@ -38,3 +38,8 @@ $rcmail_config['converse_xmpp_password']= function($args) {
 	return $args['pass'];
 };
 
+// Always embed chat even if prebinding is not configured or failed
+$rcmail_config['converse_xmpp_enable_always'] = false;
+
+// Enable debug mode
+$rcmail_config['converse_xmpp_debug'] = false;

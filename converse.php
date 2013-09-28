@@ -28,6 +28,7 @@ class converse extends rcube_plugin
 	public $noframe = true;
 	public $noajax = true;
 	private $debug = false;
+	private $devel_mode = false;
 
 	function init() {
 		$this->load_config();
@@ -38,6 +39,7 @@ class converse extends rcube_plugin
 			$this->add_hook('render_page', array($this, 'render_page'));
 			$this->add_hook('authenticate', array($this, 'authenticate'));
 			$this->debug = $this->_config_get('converse_xmpp_debug', false);
+			$this->devel_mode = $this->_config_get('converse_xmpp_devel_mode', false);
 		}
 	}
 
@@ -48,7 +50,15 @@ class converse extends rcube_plugin
 		if ($rcmail->task == 'login' || !empty($_REQUEST['_extwin']))
 			return;
 
-		$lang = 'de';
+		// map session language with converse.js locale
+		$locale = 'en';
+		$userlang = $rcmail->get_user_language();
+		$userlang_ = substr($userlang, 0, 2);
+		$locales = array('en','de','fr','es','it','af','pt_BR');
+		if (in_array($userlang, $locales))
+			$locale = $userlang;
+		else if (in_array($userlang_, $locales))
+			$locale = $userlang_;
 
 		$converse_prop = array(
 			'animate' => true,
@@ -58,7 +68,6 @@ class converse extends rcube_plugin
 			'auto_list_rooms' => true,
 			'hide_muc_server' => true,
 			'show_controlbox_by_default' => false,
-#			'i18n' => "locales['$lang']",
 			'debug' => $this->debug,
 		);
 
@@ -69,23 +78,32 @@ class converse extends rcube_plugin
 			$xsess->debug = $this->debug;
 			if ($xsess->init_connection() && $xsess->bind()){
 				$converse_prop['prebind'] = true;
-				$converse_prop['bosh_url'] = $args['bosh_url'];
+				$converse_prop['bosh_service_url'] = $args['bosh_url'];
+				$converse_prop['jid'] = $xsess->jid;
+				$converse_prop['sid'] = $xsess->sid;
+				$converse_prop['rid'] = $xsess->rid;
 			}
 			else {
-				#$rcmail->session->remove('xmpp');
+				$rcmail->session->remove('xmpp');
 			}
 		}
 		else if ($this->_config_get('converse_xmpp_enable_always')) {
-			$converse_prop['bosh_url'] = $this->_config_get('converse_xmpp_bosh_url', array(), '/http-bind');
+			$converse_prop['bosh_service_url'] = $this->_config_get('converse_xmpp_bosh_url', array(), '/http-bind');
 		}
 		else {
 			return;
 		}
 
-		$this->include_script('js/require.js');
-		$this->include_script('converse.js/converse.js');
+		if ($this->devel_mode) {
+			$this->include_script('converse.js/components/requirejs/require.js');
+			$this->include_script('js/main.js');
+			$this->include_stylesheet('converse.js/converse.css');
+		}
+		else {
+			$this->include_script('js/converse.min.js');
+			$this->include_stylesheet('css/converse.min.css');
+		}
 
-		$this->include_stylesheet('converse.js/converse.min.css');
 		$this->include_stylesheet('converse.css');
 
 		$this->api->output->add_footer(
@@ -100,33 +118,15 @@ class converse extends rcube_plugin
 			)
 		);
 
-		$inline_js = '
-define("jquery", [], function() { return jQuery; });
-require.config({ baseUrl: "'.$this->urlbase.'converse.js" });
-require(["converse"], function (converse) {
-	converse.initialize('.$rcmail->output->json_serialize($converse_prop).');
-';
-
-		if ($converse_prop['prebind']){
-			$inline_js .= '
-	var connection = new Strophe.Connection('.$rcmail->output->json_serialize($converse_prop['bosh_url']).');
-	connection.attach('.
-		$rcmail->output->json_serialize($xsess->jid).','.
-		$rcmail->output->json_serialize($xsess->sid).','.
-		$rcmail->output->json_serialize($xsess->rid).',
-		function (status) {
-			if ((status === Strophe.Status.ATTACHED) || (status === Strophe.Status.CONNECTED)) {
-				converse.onConnected(connection);
-			} else {
-				rcmail.display_message('.$rcmail->output->json_serialize($this->gettext('xmppconnectionerror')).', "error");
-				$("$chatpanel").remove();
-			}
-		}
-	);
-';
-		}
-
-		$this->api->output->add_script($inline_js .'});', 'foot');
+		$this->api->output->add_script('
+	define("jquery", [], function() { return jQuery; });
+	require.config({ baseUrl: "'.$this->urlbase.'converse.js" });
+	require(["converse"], function (converse) {
+		var args = '.$rcmail->output->json_serialize($converse_prop).';
+		args.i18n = locales["'.$locale.'"];
+		converse.initialize(args, function(e){ console.log(converse) });
+	});
+	', 'foot');
 	}
 
 	function authenticate($args) {

@@ -104,7 +104,9 @@ class converse extends rcube_plugin
 			$this->include_stylesheet('css/converse.min.css');
 		}
 
-		$this->include_stylesheet('converse.css');
+		$skin_path = $this->local_skin_path();
+		if (is_file($this->home . "/$skin_path/converse.css"))
+			$this->include_stylesheet("$skin_path/converse.css");
 
 		$this->api->output->add_footer(
 			html::div(array('id' => "chatpanel"),

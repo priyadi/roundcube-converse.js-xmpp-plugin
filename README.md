@@ -38,11 +38,12 @@ The plugin has a complete and minified version of the converse.js library with
 all its dependencies included. For development, you can pull converse.js as
 a git submodule and include the scripts and style sheets directly from there.
 
-1. Load converse.js submodule:
+1. Load the converse.js submodule:
    ```
    cd cd your_roundcube_dir/plugins/converse
    git submodule init && git submodule update
    ```
+
 2. Set `$rcmail_config['converse_xmpp_devel_mode'] = true;` in this plugins
    config file.
 

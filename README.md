@@ -13,13 +13,13 @@ Requirements
 
 Installation
 ------------
-* cd your_roundcube_dir/plugins
-* git clone https://github.com/priyadi/roundcube-converse.js-xmpp-plugin converse
-* cd converse
-* git submodule init && git submodule update
-* vi config.inc.php (make necessary adjustments)
-* cd your_roundcube_dir/
-* vi config/main.inc.php (add 'converse' to $rcmail_config['plugins'])
+* `cd your_roundcube_dir/plugins`
+* `git clone https://github.com/priyadi/roundcube-converse.js-xmpp-plugin converse`
+* `cd converse`
+* `cp config.inc.php.dist config.inc.php`
+* `vi config.inc.php` (make necessary adjustments)
+* `cd your_roundcube_dir/`
+* `vi config/main.inc.php` (add 'converse' to $rcmail_config['plugins'])
 * done!
 
 Notes
@@ -31,6 +31,21 @@ the XMPP server broadcast incoming messages to all resources.
 
 * Openfire: "route.all-resources: true"
 * Prosody: "ignore_presence_priority = true"
+
+Development
+-----------
+The plugin has a complete and minified version of the converse.js library with
+all its dependencies included. For development, you can pull converse.js as
+a git submodule and include the scripts and style sheets directly from there.
+
+1. Load the converse.js submodule:
+   ```
+   cd cd your_roundcube_dir/plugins/converse
+   git submodule init && git submodule update
+   ```
+
+2. Set `$rcmail_config['converse_xmpp_devel_mode'] = true;` in this plugins
+   config file.
 
 Credits
 -------

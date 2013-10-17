@@ -1,3 +1,6 @@
 [submodule "converse.js"]
 	path = converse.js
 	url = https://github.com/jcbrand/converse.js
+[submodule "xmpp-prebind-php"]
+	path = xmpp-prebind-php
+	url = https://github.com/candy-chat/xmpp-prebind-php

@@ -51,4 +51,3 @@ Credits
 -------
 * Some code is stolen from https://gist.github.com/Zash/3681653
 * [Converse.js](http://conversejs.org)
-* This work is sponsored by [indoglobal.com](http://indoglobal.com)

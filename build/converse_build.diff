@@ -1,0 +1,30 @@
+diff --git a/build.js b/build.js
+index 697cb2a..bc13426 100644
+--- a/build.js
++++ b/build.js
+@@ -4,7 +4,6 @@
+     out: "converse.min.js",
+     include: ['main'],
+     paths: {
+-        "jquery": "components/jquery/jquery",
+         "jed": "components/jed/jed",
+         "locales": "locale/locales",
+         "af": "locale/af/LC_MESSAGES/af",
+@@ -22,6 +21,7 @@
+         "strophe.muc": "components/strophe.muc/index",
+         "strophe.roster": "components/strophe.roster/index",
+         "strophe.vcard": "components/strophe.vcard/index",
+-        "strophe.disco": "components/strophe.disco/index"
++        "strophe.disco": "components/strophe.disco/index",
++        "crypto.aes": "components/crypto-js/build/rollups/aes"
+     }
+ })
+diff --git a/main.js b/main.js
+index ce745f6..7e6953c 100644
+--- a/main.js
++++ b/main.js
+@@ -1,3 +1,4 @@
++define("jquery", [], function() { return jQuery; });
+ require.config({
+     paths: {
+         "jquery": "components/jquery/jquery",

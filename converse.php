@@ -95,9 +95,9 @@ class converse extends rcube_plugin
 		}
 
 		if ($this->devel_mode) {
-			$this->include_script('converse.js/components/requirejs/require.js');
+			$this->include_script('devel/converse.js/components/requirejs/require.js');
 			$this->include_script('js/main.js');
-			$this->include_stylesheet('converse.js/converse.css');
+			$this->include_stylesheet('devel/converse.js/converse.css');
 		}
 		else {
 			$this->include_script('js/converse.min.js');

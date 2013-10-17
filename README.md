@@ -7,7 +7,6 @@ much a work in progress.
 Requirements
 ------------
 * BOSH support in XMPP server or BOSH connection manager
-* Plaintext auth in BOSH. This currently doesn't support other auth methods
 * (optional) BOSH proxy in web server, to avoid crossdomain issues
 * (recommended) XMPP server set to broadcast incoming messages to all resources. See notes below.
 
@@ -38,7 +37,7 @@ The plugin has a complete and minified version of the converse.js library with
 all its dependencies included. For development, you can pull converse.js as
 a git submodule and include the scripts and style sheets directly from there.
 
-1. Load the converse.js submodule:
+1. Load the converse.js and xmpp-prebind-php submodule:
    ```
    cd cd your_roundcube_dir/plugins/converse
    git submodule init && git submodule update
@@ -49,5 +48,6 @@ a git submodule and include the scripts and style sheets directly from there.
 
 Credits
 -------
-* Some code is stolen from https://gist.github.com/Zash/3681653
+* Some code were stolen from https://gist.github.com/Zash/3681653
 * [Converse.js](http://conversejs.org)
+* [Candy Chat](http://candy-chat.github.io/candy/) for its prebinding library

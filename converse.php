@@ -73,18 +73,51 @@ class converse extends rcube_plugin
 
 		// prebind
 		if (!empty($_SESSION['converse_xmpp_prebind'])) {
-			$args = $_SESSION['converse_xmpp_prebind'];
-			$xsess = new XmppPrebindSession($args['bosh_prebind_url'], $args['host'], $args['user'], $rcmail->decrypt($args['pass']));
-			$xsess->debug = $this->debug;
-			if ($xsess->init_connection() && $xsess->bind()){
-				$converse_prop['prebind'] = true;
-				$converse_prop['bosh_service_url'] = $args['bosh_url'];
-				$converse_prop['jid'] = $xsess->jid;
-				$converse_prop['sid'] = $xsess->sid;
-				$converse_prop['rid'] = $xsess->rid;
-			}
-			else {
-				$rcmail->session->remove('xmpp');
+			if ($this->_config_get('converse_xmpp_old_style_prebind')) {
+				// old prebind code, will be removed in the future
+				$args = $_SESSION['converse_xmpp_prebind'];
+				$xsess = new XmppPrebindSession($args['bosh_prebind_url'], $args['host'], $args['user'], $rcmail->decrypt($args['pass']));
+				$xsess->debug = $this->debug;
+				if ($xsess->init_connection() && $xsess->bind()){
+					$converse_prop['prebind'] = true;
+					$converse_prop['bosh_service_url'] = $args['bosh_url'];
+					$converse_prop['jid'] = $xsess->jid;
+					$converse_prop['sid'] = $xsess->sid;
+					$converse_prop['rid'] = $xsess->rid;
+				}
+				else {
+					$rcmail->session->remove('xmpp');
+				}
+			} else {
+				// newer prebind code, using candy chat's prebind library
+				if ($this->devel_mode) {
+					require_once(__DIR__ . '/devel/xmpp-prebind-php/lib/XmppPrebind.php');
+				} else {
+					require_once(__DIR__ . '/php/xmpp-prebind-php/lib/XmppPrebind.php');
+				}
+				$args = $_SESSION['converse_xmpp_prebind'];
+				if (strpos($args['user'], '@')) {
+					list($args['user'], $args['host']) = preg_split('/@/', $args['user']);
+				}
+				// TODO: resource is harcoded to 'Roundcube' for now
+				$xsess = new XmppPrebind($args['host'], $args['bosh_prebind_url'], 'Roundcube', false, $this->_config_get('converse_xmpp_debug'));
+				$xsess->connect($args['user'], $rcmail->decrypt($args['pass']));
+				$success = true;
+				try {
+					$xsess->auth();
+				} catch (Exception $e) {
+					$success = false;
+				}
+				if ($success) {
+					$sinfo = $xsess->getSessionInfo();
+					$converse_prop['prebind'] = true;
+					$converse_prop['bosh_service_url'] = $args['bosh_url'];
+					$converse_prop['jid'] = $sinfo['jid'];
+					$converse_prop['sid'] = $sinfo['sid'];
+					$converse_prop['rid'] = $sinfo['rid'];
+				} else {
+					$rcmail->session->remove('xmpp');
+				}
 			}
 		}
 		else if ($this->_config_get('converse_xmpp_enable_always')) {

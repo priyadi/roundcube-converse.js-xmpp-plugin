@@ -46,3 +46,7 @@ $rcmail_config['converse_xmpp_debug'] = false;
 
 // Enable development mode
 $rcmail_config['converse_xmpp_devel_mode'] = false;
+
+// Use older XMPP bind code (in case someone is having problem with
+// newer code using Candy Chat's prebind library)
+$rcmail_config['converse_xmpp_old_style_prebind'] = false;

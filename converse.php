@@ -100,7 +100,7 @@ class converse extends rcube_plugin
 					list($args['user'], $args['host']) = preg_split('/@/', $args['user']);
 				}
 				// TODO: resource is harcoded to 'Roundcube' for now
-				$xsess = new XmppPrebind($args['host'], $args['bosh_prebind_url'], 'Roundcube', false, $this->_config_get('converse_xmpp_debug'));
+				$xsess = new XmppPrebind($args['host'], $args['bosh_prebind_url'], 'Roundcube-'. uniqid(), false, $this->_config_get('converse_xmpp_debug'));
 				$success = true;
 				try {
 					$xsess->connect($args['user'], $rcmail->decrypt($args['pass']));

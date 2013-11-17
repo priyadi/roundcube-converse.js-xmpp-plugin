@@ -123,3 +123,30 @@ div#settings
 #toggle-controlbox {
 	font-size: 12px;
 }
+
+.chatbox .dropdown dt a span.icon-online,
+#converse-roster dd.current-xmpp-contact span.icon-online {
+    color: #0c0;
+}
+
+.chatbox .dropdown dt a span.icon-dnd,
+#converse-roster dd.current-xmpp-contact span.icon-dnd {
+    color: #c00;
+}
+
+.chatbox .dropdown dt a span.icon-away,
+#converse-roster dd.current-xmpp-contact span.icon-away {
+    color: orange;
+}
+
+.chatbox .dropdown dt a span.icon-offline,
+#converse-roster dd.current-xmpp-contact span.icon-offline {
+    color: #ccc;
+}
+
+.xmpp-status-menu li a,
+.chatbox .toggle-smiley ul li a,
+#controlbox div.xmpp-status a.icon-pencil,
+#converse-roster dd a.icon-remove {
+    text-decoration: none;
+}

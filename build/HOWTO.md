@@ -17,20 +17,21 @@ which is loaded via git submodule.
 3. Exclude the jquery dependency from the converse.js build files using the 
 diff from this package:
   ```
-  cd converse.js
-  patch -p1 < ../build/converse_build.diff
+  cd devel/converse.js
+  patch -p1 < ../../build/converse_build.diff
   ```
 4. Run the build process
   ```
-  cd converse.js
-  make release
+  cd devel/converse.js
+  grunt minify
   ```
 
 5. Copy the necessary resources from converse.js
    ```
-   cp converse.js/converse.min.css css/
-   cp -r converse.js/images css/images
-   cp -r converse.js/fonticons css/fonticons
+   cp devel/converse.js/converse.min.js js/
+   cp devel/converse.js/converse.min.css css/
+   cp -r devel/converse.js/images css/images
+   cp -r devel/converse.js/fonticons css/fonticons
    ```
 
 [conversedocs]: http://conversejs.org/docs/html/index.html#development

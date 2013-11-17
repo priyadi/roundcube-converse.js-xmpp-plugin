@@ -10,15 +10,6 @@ index 697cb2a..bc13426 100644
          "jed": "components/jed/jed",
          "locales": "locale/locales",
          "af": "locale/af/LC_MESSAGES/af",
-@@ -22,6 +21,7 @@
-         "strophe.muc": "components/strophe.muc/index",
-         "strophe.roster": "components/strophe.roster/index",
-         "strophe.vcard": "components/strophe.vcard/index",
--        "strophe.disco": "components/strophe.disco/index"
-+        "strophe.disco": "components/strophe.disco/index",
-+        "crypto.aes": "components/crypto-js/build/rollups/aes"
-     }
- })
 diff --git a/main.js b/main.js
 index ce745f6..7e6953c 100644
 --- a/main.js

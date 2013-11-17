@@ -34,8 +34,8 @@ class converse extends rcube_plugin
 		$this->load_config();
 
 		// we at least require a BOSH url in config
-		if ($this->_config_get('converse_xmpp_bosh_url')) {
-		    $this->add_texts('localization/', false);
+		if ($this->_config_get('converse_xmpp_bosh_url') || $this->_config_get('converse_xmpp_enable_always')) {
+			$this->add_texts('localization/', false);
 			$this->add_hook('render_page', array($this, 'render_page'));
 			$this->add_hook('authenticate', array($this, 'authenticate'));
 			$this->debug = $this->_config_get('converse_xmpp_debug', false);
@@ -106,6 +106,7 @@ class converse extends rcube_plugin
 					$xsess->connect($args['user'], $rcmail->decrypt($args['pass']));
 					$xsess->auth();
 				} catch (Exception $e) {
+					rcube::raise_error("Converse-XMPP: Prebind failure: " . $e->getMessage());
 					$success = false;
 				}
 				if ($success) {
@@ -141,21 +142,11 @@ class converse extends rcube_plugin
 		if (is_file($this->home . "/$skin_path/converse.css"))
 			$this->include_stylesheet("$skin_path/converse.css");
 
-		$this->api->output->add_footer(
-			html::div(array('id' => "chatpanel"),
-				html::div(array('id' => "collective-xmpp-chat-data"), '').
-				html::div(array('id' => "toggle-controlbox"),
-					html::a(array('href' => '#', 'class' => "chat toggle-online-users"),
-						html::tag('strong', 'conn-feedback', $this->gettext('togglechat')).
-						html::tag('strong', array('style' => "display:none", 'id' => "online-count"), '(0)')
-					)
-				)
-			)
-		);
+		$this->api->output->add_footer(html::div(array('id' => "conversejs"), ''));
 
 		$this->api->output->add_script('
 	define("jquery", [], function() { return jQuery; });
-	require.config({ baseUrl: "'.$this->urlbase.'converse.js" });
+	require.config({ baseUrl: "'.$this->urlbase.'devel/converse.js" });
 	require(["converse"], function (converse) {
 		var args = '.$rcmail->output->json_serialize($converse_prop).';
 		args.i18n = locales["'.$locale.'"];
@@ -167,13 +158,21 @@ class converse extends rcube_plugin
 	function authenticate($args) {
 		if ($prebind_url = $this->_config_get('converse_xmpp_bosh_prebind_url', $args)) {
 			$rcmail = rcmail::get_instance();
-			$_SESSION['converse_xmpp_prebind'] = array(
+			$xmpp_prebind = array(
 				'bosh_prebind_url' => $prebind_url,
 				'bosh_url' => $this->_config_get('converse_xmpp_bosh_url', $args, '/http-bind'),
 				'host' => $this->_config_get('converse_xmpp_hostname', $args, $args['host']),
 				'user' => $this->_config_get('converse_xmpp_username', $args, $args['user']),
 				'pass' => $rcmail->encrypt($this->_config_get('converse_xmpp_password', $args, $args['pass'])),
 			);
+			$valid = true;
+			foreach ($xmpp_prebind as $k => $val) {
+				if (empty($val))
+					$valid = false;
+			}
+
+			if ($valid)
+				$_SESSION['converse_xmpp_prebind'] = $xmpp_prebind;
 		}
 
 		return $args;

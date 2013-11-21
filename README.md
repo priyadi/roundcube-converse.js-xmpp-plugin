@@ -31,6 +31,11 @@ the XMPP server broadcast incoming messages to all resources.
 * Openfire: "route.all-resources: true"
 * Prosody: "ignore_presence_priority = true"
 
+Troubleshooting
+---------------
+
+Read [troubleshooting](TROUBLESHOOTING.md) if you are having problem. 
+
 Development
 -----------
 The plugin has a complete and minified version of the converse.js library with

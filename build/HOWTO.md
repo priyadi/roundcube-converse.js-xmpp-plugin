@@ -28,7 +28,9 @@ diff from this package:
 
 5. Copy the necessary resources from converse.js
    ```
-   cp devel/converse.js/converse.min.js js/
+   cp devel/converse.js/builds/converse.min.js js/
+   cp devel/converse.js/builds/converse-no-locales-no-otr.min.js js/
+   cp devel/converse.js/builds/converse-no-otr.min.js js/
    cp devel/converse.js/converse.min.css css/
    cp -r devel/converse.js/images css/images
    cp -r devel/converse.js/fonticons css/fonticons

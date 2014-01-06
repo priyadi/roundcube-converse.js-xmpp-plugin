@@ -19,3 +19,24 @@ index ce745f6..7e6953c 100644
  require.config({
      paths: {
          "jquery": "components/jquery/jquery",
+diff --git a/main.js b/main.js
+index 411f84e..f13f093 100644
+--- a/main.js
++++ b/main.js
+@@ -1,3 +1,4 @@
++define("jquery", [], function() { return jQuery; });
+ require.config({
+     paths: {
+         "jquery": "components/jquery/jquery",
+diff --git a/src/build.js b/src/build.js
+index 37e695a..d9a386d 100644
+--- a/src/build.js
++++ b/src/build.js
+@@ -4,7 +4,6 @@
+     out: "../builds/converse.min.js",
+     include: ['main'],
+     paths: {
+-        "jquery": "components/jquery/jquery",
+         "jed": "components/jed/jed",
+         "locales": "locale/locales",
+         "af": "locale/af/LC_MESSAGES/af",

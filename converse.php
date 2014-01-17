@@ -29,6 +29,7 @@ class converse extends rcube_plugin
 	public $noajax = true;
 	private $debug = false;
 	private $devel_mode = false;
+    private $resource_prefix = "Roundcube-" // Resource Name = $resource_prefix+uniqid()
 
 	function init() {
 		$this->load_config();
@@ -41,6 +42,8 @@ class converse extends rcube_plugin
 			$this->debug = $this->_config_get('converse_xmpp_debug', false);
 			$this->devel_mode = $this->_config_get('converse_xmpp_devel_mode', false);
 		}
+
+        if (($rp = $this->_config_get('converse_xmpp_resource_prefix')) $this->resource_prefix = $rp;
 	}
 
 	function render_page($event) {
@@ -99,8 +102,7 @@ class converse extends rcube_plugin
 				if (strpos($args['user'], '@')) {
 					list($args['user'], $args['host']) = preg_split('/@/', $args['user']);
 				}
-				// TODO: resource is harcoded to 'Roundcube' for now
-				$xsess = new XmppPrebind($args['host'], $args['bosh_prebind_url'], 'Roundcube-'. uniqid(), false, $this->_config_get('converse_xmpp_debug'));
+				$xsess = new XmppPrebind($args['host'], $args['bosh_prebind_url'], $this->resource_prefix. uniqid(), false, $this->_config_get('converse_xmpp_debug'));
 				$success = true;
 				try {
 					$xsess->connect($args['user'], $rcmail->decrypt($args['pass']));

@@ -50,3 +50,8 @@ $rcmail_config['converse_xmpp_devel_mode'] = false;
 // Use older XMPP bind code (in case someone is having problem with
 // newer code using Candy Chat's prebind library)
 $rcmail_config['converse_xmpp_old_style_prebind'] = false;
+
+// Configure XMPP resource prefix. XMPP resource is set to this variable
+// appended with a unique id. Defaults to 'Roundcube-'.
+$rcmail_config['converse_xmpp_resource_prefix'] = 'Roundcube-';
+

@@ -29,7 +29,7 @@ class converse extends rcube_plugin
 	public $noajax = true;
 	private $debug = false;
 	private $devel_mode = false;
-    private $resource_prefix = "Roundcube-" // Resource Name = $resource_prefix+uniqid()
+	private $resource_prefix = "Roundcube-"; // Resource Name = $resource_prefix+uniqid()
 
 	function init() {
 		$this->load_config();
@@ -43,7 +43,7 @@ class converse extends rcube_plugin
 			$this->devel_mode = $this->_config_get('converse_xmpp_devel_mode', false);
 		}
 
-        if (($rp = $this->_config_get('converse_xmpp_resource_prefix')) $this->resource_prefix = $rp;
+		if ($rp = $this->_config_get('converse_xmpp_resource_prefix')) $this->resource_prefix = $rp;
 	}
 
 	function render_page($event) {

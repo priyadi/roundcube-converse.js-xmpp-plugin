@@ -21,6 +21,10 @@ Installation
 * `vi config/main.inc.php` (add 'converse' to $rcmail_config['plugins'])
 * done!
 
+If you are already logged on to Roundcube, you need to log out and log back in
+for the plugin to initialize correctly. You can also remove all your PHP
+session files to force log out all of your users.
+
 Notes
 -----
 

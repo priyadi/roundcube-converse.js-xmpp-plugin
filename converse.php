@@ -57,7 +57,21 @@ class converse extends rcube_plugin
 		$locale = 'en';
 		$userlang = $rcmail->get_user_language();
 		$userlang_ = substr($userlang, 0, 2);
-		$locales = array('af', 'de', 'en', 'es', 'fr', 'hu', 'it', 'ja', 'nl', 'pt_BR', 'ru');
+		$locales = array(
+			'af',
+			'de',
+			'en',
+			'es',
+			'fr',
+			'he',
+			'hu',
+			'id',
+			'it',
+			'ja',
+			'nl',
+			'pt_BR',
+			'ru'
+		);
 		if (in_array($userlang, $locales))
 			$locale = $userlang;
 		else if (in_array($userlang_, $locales))

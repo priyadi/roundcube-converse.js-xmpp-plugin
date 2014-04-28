@@ -26,7 +26,7 @@ class converse extends rcube_plugin
 {
 	public $task = '?(?!logout).*';
 	public $noframe = true;
-	public $noajax = true;
+	public $noajax = false;
 	private $debug = false;
 	private $devel_mode = false;
 	private $resource_prefix = "Roundcube-"; // Resource Name = $resource_prefix+uniqid()
@@ -36,9 +36,12 @@ class converse extends rcube_plugin
 
 		// we at least require a BOSH url in config
 		if ($this->_config_get('converse_xmpp_bosh_url') || $this->_config_get('converse_xmpp_enable_always')) {
-			$this->add_texts('localization/', false);
-			$this->add_hook('render_page', array($this, 'render_page'));
-			$this->add_hook('authenticate', array($this, 'authenticate'));
+			if (!rcube::get_instance()->output->ajax_call) {
+				$this->add_texts('localization/', false);
+				$this->add_hook('render_page', array($this, 'render_page'));
+				$this->add_hook('authenticate', array($this, 'authenticate'));
+			}
+			$this->register_action('plugin.converse_bind', array($this, 'client_bind'));
 			$this->debug = $this->_config_get('converse_xmpp_debug', false);
 			$this->devel_mode = $this->_config_get('converse_xmpp_devel_mode', false);
 		}
@@ -85,11 +88,13 @@ class converse extends rcube_plugin
 			'auto_list_rooms' => true,
 			'hide_muc_server' => true,
 			'show_controlbox_by_default' => false,
+			'expose_rid_and_sid' => $this->_config_get('converse_xmpp_enable_always', false),
+			'bosh_service_url' => $this->_config_get('converse_xmpp_bosh_url', array(), '/http-bind'),
 			'debug' => $this->debug,
 		);
 
 		// prebind
-		if (!empty($_SESSION['converse_xmpp_prebind'])) {
+		if (!empty($_SESSION['converse_xmpp_prebind']) && empty($_SESSION['xmpp'])) {
 			if ($this->_config_get('converse_xmpp_old_style_prebind')) {
 				// old prebind code, will be removed in the future
 				$args = $_SESSION['converse_xmpp_prebind'];
@@ -116,7 +121,7 @@ class converse extends rcube_plugin
 				if (strpos($args['user'], '@')) {
 					list($args['user'], $args['host']) = preg_split('/@/', $args['user']);
 				}
-				$xsess = new XmppPrebind($args['host'], $args['bosh_prebind_url'], $this->resource_prefix. uniqid(), false, $this->_config_get('converse_xmpp_debug'));
+				$xsess = new XmppPrebind($args['host'], $args['bosh_prebind_url'], $this->resource_prefix. uniqid(), false, $this->debug);
 				$success = true;
 				try {
 					$xsess->connect($args['user'], $rcmail->decrypt($args['pass']));
@@ -137,8 +142,9 @@ class converse extends rcube_plugin
 				}
 			}
 		}
-		else if ($this->_config_get('converse_xmpp_enable_always')) {
-			$converse_prop['bosh_service_url'] = $this->_config_get('converse_xmpp_bosh_url', array(), '/http-bind');
+		else if (!empty($_SESSION['xmpp'])) {
+			$converse_prop['prebind'] = true;
+			$converse_prop += (array)$_SESSION['xmpp'];
 		}
 		else {
 			return;
@@ -154,6 +160,8 @@ class converse extends rcube_plugin
 			$this->include_stylesheet('css/converse.min.css');
 		}
 
+		$this->include_script('js/converse-rcmail.js');
+
 		$skin_path = $this->local_skin_path();
 		if (is_file($this->home . "/$skin_path/converse.css"))
 			$this->include_stylesheet("$skin_path/converse.css");
@@ -166,7 +174,7 @@ class converse extends rcube_plugin
 	require(["converse"], function (converse) {
 		var args = '.$rcmail->output->json_serialize($converse_prop).';
 		args.i18n = locales["'.$locale.'"];
-		converse.initialize(args, function(e){ console.log(converse) });
+		rcmail_converse_init(converse, args);
 	});
 	', 'foot');
 	}
@@ -192,6 +200,18 @@ class converse extends rcube_plugin
 		}
 
 		return $args;
+	}
+
+	function client_bind() {
+		$jid = rcube_utils::get_input_value('jid', RCUBE_INPUT_POST);
+		$sid = rcube_utils::get_input_value('sid', RCUBE_INPUT_POST);
+
+		if (!empty($jid) && !empty($sid)) {
+			$_SESSION['xmpp'] = array(
+				'jid' => $jid,
+				'sid' => $sid,
+			);
+		}
 	}
 
 	function _config_get($opt, $args = array(), $default = null) {
@@ -301,6 +321,7 @@ class XmppPrebindSession
 				CURLOPT_RETURNTRANSFER => true,
 				CURLOPT_POST => true,
 				CURLOPT_POSTFIELDS => $bosh_xml,
+				CURLOPT_FRESH_CONNECT => true,
 				CURLOPT_HTTPHEADER => array('Content-Type: application/xml'),
 			));
 			$out = curl_exec($ch);

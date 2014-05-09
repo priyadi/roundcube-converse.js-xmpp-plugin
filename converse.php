@@ -25,7 +25,7 @@
 class converse extends rcube_plugin
 {
 	public $task = '?(?!logout).*';
-	public $noframe = true;
+	public $noframe = false;
 	public $noajax = false;
 	private $debug = false;
 	private $devel_mode = false;
@@ -36,11 +36,18 @@ class converse extends rcube_plugin
 
 		// we at least require a BOSH url in config
 		if ($this->_config_get('converse_xmpp_bosh_url') || $this->_config_get('converse_xmpp_enable_always')) {
-			if (!rcube::get_instance()->output->ajax_call) {
+			$rcmail = rcube::get_instance();
+			if (!$rcmail->output->ajax_call && empty($_REQUEST['_framed']) && $this->_config_get('converse_prebind', array(), 1) > 0) {
 				$this->add_texts('localization/', false);
 				$this->add_hook('render_page', array($this, 'render_page'));
 				$this->add_hook('authenticate', array($this, 'authenticate'));
 			}
+			if ($rcmail->task == 'settings') {
+				$this->add_texts('localization/', false);
+				$this->add_hook('preferences_list', array($this, 'preferences_list'));
+				$this->add_hook('preferences_save', array($this, 'preferences_save'));
+			}
+
 			$this->register_action('plugin.converse_bind', array($this, 'client_bind'));
 			$this->debug = $this->_config_get('converse_xmpp_debug', false);
 			$this->devel_mode = $this->_config_get('converse_xmpp_devel_mode', false);
@@ -95,7 +102,10 @@ class converse extends rcube_plugin
 
 		// prebind
 		if (!empty($_SESSION['converse_xmpp_prebind']) && empty($_SESSION['xmpp'])) {
-			if ($this->_config_get('converse_xmpp_old_style_prebind')) {
+			// prebinding disabled by user
+			if ($this->_config_get('converse_prebind', $args, 1) != 1) {
+				$rcmail->session->remove('converse_xmpp_prebind');
+			} else if ($this->_config_get('converse_xmpp_old_style_prebind')) {
 				// old prebind code, will be removed in the future
 				$args = $_SESSION['converse_xmpp_prebind'];
 				$xsess = new XmppPrebindSession($args['bosh_prebind_url'], $args['host'], $args['user'], $rcmail->decrypt($args['pass']));
@@ -146,7 +156,7 @@ class converse extends rcube_plugin
 			$converse_prop['prebind'] = true;
 			$converse_prop += (array)$_SESSION['xmpp'];
 		}
-		else {
+		else if (!$this->_config_get('converse_xmpp_enable_always', false)) {
 			return;
 		}
 
@@ -220,6 +230,58 @@ class converse extends rcube_plugin
 		if (is_callable($value))
 			return $value($args);
 		return $value;
+	}
+
+
+	/**
+	 * Handler for preferences_list hook.
+	 *
+	 * @param array Original parameters
+	 * @return array Modified parameters
+	 */
+	function preferences_list($p)
+	{
+		if ($p['section'] != 'general') {
+			return $p;
+		}
+
+		$rcmail = rcube::get_instance();
+		$no_override = array_flip((array)$rcmail->config->get('dont_override'));
+
+		if (!isset($no_override['converse_prebind'])) {
+			$p['blocks']['converse'] = array(
+				'name' => $this->gettext('prefstitle'),
+			);
+
+			$default = 2;
+			$field_id = 'rcmfd_converse_prebind';
+			$select = new html_select(array('name' => '_converse_prebind', 'id' => $field_id));
+			$select->add($this->gettext('never'),  0);
+			if ($this->_config_get('converse_xmpp_bosh_prebind_url', array())) {
+				$select->add($this->gettext('auto'), 1);
+				$default = 1;
+			}
+			$select->add($this->gettext('manual'), 2);
+			$p['blocks']['converse']['options']['converse_enable'] = array(
+				'title' => html::label($field_id, Q($this->gettext('enableprebind'))),
+				'content' => $select->show($rcmail->config->get('converse_prebind', $default)),
+			);
+		}
+		return $p;
+	}
+
+	/*
+	 * Handler for preferences_save hook.
+	 *
+	 * @param array Original parameters
+	 * @return array Modified parameters
+	 */
+	function preferences_save($p)
+	{
+		if ($p['section'] == 'general') {
+			$p['prefs']['converse_prebind'] = intval(rcube_utils::get_input_value('_converse_prebind', rcube_utils::INPUT_POST));
+			return $p;
+		}
 	}
 }
 

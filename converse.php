@@ -261,7 +261,9 @@ class converse extends rcube_plugin
 				$select->add($this->gettext('auto'), 1);
 				$default = 1;
 			}
-			$select->add($this->gettext('manual'), 2);
+			if ($this->_config_get('converse_xmpp_enable_always', false)) {
+				$select->add($this->gettext('manual'), 2);
+			}
 			$p['blocks']['converse']['options']['converse_enable'] = array(
 				'title' => html::label($field_id, Q($this->gettext('enableprebind'))),
 				'content' => $select->show($rcmail->config->get('converse_prebind', $default)),

@@ -14,7 +14,7 @@ include 'FirePHP/fb.php';
 /**
  * PEAR Auth_SASL
  */
-require 'Auth/SASL.php';
+#require 'Auth/SASL.php';
 
 /**
  * XMPP Library for connecting to jabber server & receiving sid and rid

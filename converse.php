@@ -80,7 +80,8 @@ class converse extends rcube_plugin
 			'ja',
 			'nl',
 			'pt_BR',
-			'ru'
+			'ru',
+			'zh'
 		);
 		if (in_array($userlang, $locales))
 			$locale = $userlang;

@@ -32,6 +32,7 @@ diff from this package:
    cp devel/converse.js/builds/converse-no-locales-no-otr.min.js js/
    cp devel/converse.js/builds/converse-no-otr.min.js js/
    cp -r devel/converse.js/css/* css/
+   cp -r devel/converse.js/fonticons .
    ```
 
 [conversedocs]: http://conversejs.org/docs/html/index.html#development

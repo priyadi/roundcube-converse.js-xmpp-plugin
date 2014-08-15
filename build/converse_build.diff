@@ -1,25 +1,28 @@
 diff --git a/main.js b/main.js
-index d374d85..bf19c57 100644
+index a5de646..9813c08 100644
 --- a/main.js
 +++ b/main.js
-@@ -1,3 +1,4 @@
-+define("jquery", [], function() { return jQuery; });
- require.config({
-     paths: {
-         "jquery": "components/jquery/jquery",
+@@ -105,6 +105,7 @@ var initializeEasing = function () {
+ };
+ 
+ if (typeof(require) !== 'undefined') {
++    define("jquery", [], function() { return jQuery; });
+     require.config(config);
+     require(["jquery", "converse"], function($, converse) {
+         window.converse = converse;
 diff --git a/src/build.js b/src/build.js
-index c6524c4..688f171 100644
+index 43f2d11..377154b 100644
 --- a/src/build.js
 +++ b/src/build.js
-@@ -4,7 +4,6 @@
-     out: "../builds/converse.min.js",
-     include: ['main'],
+@@ -11,7 +11,6 @@
+         }
+     },
      paths: {
--        "jquery": "components/jquery/jquery",
+-        "jquery": "components/jquery/dist/jquery",
          "jed": "components/jed/jed",
          "locales": "locale/locales",
          "af": "locale/af/LC_MESSAGES/af",
-@@ -33,8 +32,8 @@
+@@ -42,8 +41,8 @@
          "bigint": "src/bigint",
          "crypto.core": "components/otr/vendor/cryptojs/core",
          "crypto.enc-base64": "components/otr/vendor/cryptojs/enc-base64",

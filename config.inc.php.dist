@@ -38,6 +38,11 @@ $rcmail_config['converse_xmpp_password']= function($args) {
 	return $args['pass'];
 };
 
+// converse.js file to use, defaults to converse.min.js
+// alternatives: converse-no-otr.min.js, converse-no-locales-no-otr.min.js
+// If you want to disable OTR and/or locales, use one of the alternatives
+$rcmail_config['converse_jsfile'] = 'converse.min.js';
+
 // Always embed chat even if prebinding is not configured or failed
 $rcmail_config['converse_xmpp_enable_always'] = false;
 

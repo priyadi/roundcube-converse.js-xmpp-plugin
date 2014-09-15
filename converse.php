@@ -31,6 +31,7 @@ class converse extends rcube_plugin
 	private $devel_mode = false;
 	private $resource_prefix = "Roundcube-"; // Resource Name = $resource_prefix+uniqid()
 	private $jsfile = 'converse.min.js';
+	private $converseconfig = array();
 
 	function init() {
 		$this->load_config();
@@ -50,11 +51,13 @@ class converse extends rcube_plugin
 			}
 
 			$this->register_action('plugin.converse_bind', array($this, 'client_bind'));
-			$this->debug = $this->_config_get('converse_xmpp_debug', false);
-			$this->devel_mode = $this->_config_get('converse_xmpp_devel_mode', false);
-			$this->jsfile = $this->_config_get('converse_jsfile', 'converse.min.js');
 		}
 
+		$this->debug = $this->_config_get('converse_xmpp_debug', false);
+		$this->devel_mode = $this->_config_get('converse_xmpp_devel_mode', false);
+		$this->jsfile = $this->_config_get('converse_jsfile', 'converse.min.js');
+		$converseconfig = $this->_config_get('converse_config', array());
+		$this->converseconfig = array_merge($this->converseconfig, $converseconfig);
 		if ($rp = $this->_config_get('converse_xmpp_resource_prefix')) $this->resource_prefix = $rp;
 	}
 
@@ -91,17 +94,13 @@ class converse extends rcube_plugin
 			$locale = $userlang_;
 
 		$converse_prop = array(
-			'animate' => true,
 			'prebind' => false,
-			'xhr_user_search' => false,
-			'auto_subscribe' => false,
-			'auto_list_rooms' => true,
-			'hide_muc_server' => true,
-			'show_controlbox_by_default' => false,
 			'expose_rid_and_sid' => $this->_config_get('converse_xmpp_enable_always', false),
 			'bosh_service_url' => $this->_config_get('converse_xmpp_bosh_url', array(), '/http-bind'),
 			'debug' => $this->debug,
 		);
+
+		$converse_prop = array_merge($this->converseconfig, $converse_prop);
 
 		// prebind
 		if (!empty($_SESSION['converse_xmpp_prebind']) && empty($_SESSION['xmpp'])) {

@@ -150,3 +150,11 @@ div#settings
 #converse-roster dd a.icon-remove {
     text-decoration: none;
 }
+
+#converse-roster .roster-filter {
+    width: 93px;
+}
+
+#converse-roster .filter-type {
+    width: 94px;
+}

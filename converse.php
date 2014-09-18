@@ -53,10 +53,10 @@ class converse extends rcube_plugin
 			$this->register_action('plugin.converse_bind', array($this, 'client_bind'));
 		}
 
-		$this->debug = $this->_config_get('converse_xmpp_debug', false);
-		$this->devel_mode = $this->_config_get('converse_xmpp_devel_mode', false);
-		$this->jsfile = $this->_config_get('converse_jsfile', 'converse.min.js');
-		$converseconfig = $this->_config_get('converse_config', array());
+		$this->debug = $this->_config_get('converse_xmpp_debug', array(), false);
+		$this->devel_mode = $this->_config_get('converse_xmpp_devel_mode', array(), false);
+		$this->jsfile = $this->_config_get('converse_jsfile', array(), 'converse.min.js');
+		$converseconfig = $this->_config_get('converse_config', array(), array());
 		$this->converseconfig = array_merge($this->converseconfig, $converseconfig);
 		if ($rp = $this->_config_get('converse_xmpp_resource_prefix')) $this->resource_prefix = $rp;
 	}
@@ -95,7 +95,7 @@ class converse extends rcube_plugin
 
 		$converse_prop = array(
 			'prebind' => false,
-			'expose_rid_and_sid' => $this->_config_get('converse_xmpp_enable_always', false),
+			'expose_rid_and_sid' => $this->_config_get('converse_xmpp_enable_always', array(), false),
 			'bosh_service_url' => $this->_config_get('converse_xmpp_bosh_url', array(), '/http-bind'),
 			'debug' => $this->debug,
 		);
@@ -158,7 +158,7 @@ class converse extends rcube_plugin
 			$converse_prop['prebind'] = true;
 			$converse_prop += (array)$_SESSION['xmpp'];
 		}
-		else if (!$this->_config_get('converse_xmpp_enable_always', false)) {
+		else if (!$this->_config_get('converse_xmpp_enable_always', array(), false)) {
 			return;
 		}
 
@@ -263,7 +263,7 @@ class converse extends rcube_plugin
 				$select->add($this->gettext('auto'), 1);
 				$default = 1;
 			}
-			if ($this->_config_get('converse_xmpp_enable_always', false)) {
+			if ($this->_config_get('converse_xmpp_enable_always', array(), false)) {
 				$select->add($this->gettext('manual'), 2);
 			}
 			$p['blocks']['converse']['options']['converse_enable'] = array(

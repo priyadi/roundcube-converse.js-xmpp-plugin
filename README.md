@@ -15,7 +15,7 @@ Installation
 * `cd your_roundcube_dir/plugins`
 * `git clone https://github.com/priyadi/roundcube-converse.js-xmpp-plugin converse`
 * `cd converse`
-* `git checkout v0.7.4`
+* `git checkout v0.8.3.0`
 * `cp config.inc.php.dist config.inc.php`
 * `vi config.inc.php` (make necessary adjustments)
 * `cd your_roundcube_dir/`

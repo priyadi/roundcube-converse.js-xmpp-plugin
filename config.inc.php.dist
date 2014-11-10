@@ -68,3 +68,6 @@ $rcmail_config['converse_xmpp_old_style_prebind'] = false;
 // appended with a unique id. Defaults to 'Roundcube-'.
 $rcmail_config['converse_xmpp_resource_prefix'] = 'Roundcube-';
 
+// Default for user preference if converse should be enabled
+// 0 = never, 1 = if prebind url configured, 2 = always
+$rcmail_config['converse_prebind'] = 2;

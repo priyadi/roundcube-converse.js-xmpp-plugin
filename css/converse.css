@@ -965,7 +965,7 @@ dl.add-converse-contact {
   width: 100%;
   position: relative;
   margin: 0.5em 0 0 0;
-  height: 194px;
+  height: 100%;
   height: calc(100% - 68px);
   overflow: hidden;
 }
@@ -981,7 +981,7 @@ dl.add-converse-contact {
 #converse-roster .filter-type {
   height: 20px;
   padding: 0;
-  margin: 0 0 0 -5px;
+  margin: 0 0 0 0px;
 }
 /* (jQ addClass:) if input has value: */
 #converse-roster .roster-filter.x {

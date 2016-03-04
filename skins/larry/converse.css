@@ -33,7 +33,11 @@
 }
 
 #converse-roster {
-	height: 196px;
+  width:100%;
+  position:relative;
+  margin:.5em 0 0;
+  height:100%;
+  height:calc(100% - 68px);
 	overflow: hidden;
 }
 
@@ -154,8 +158,10 @@ div#settings
 
 #converse-roster .roster-filter {
     width: 93px;
+    height: 18px;
+    vertical-align: top;
 }
 
 #converse-roster .filter-type {
-    width: 94px;
+    width: 85px;
 }

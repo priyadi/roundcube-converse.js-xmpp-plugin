@@ -23,6 +23,17 @@ $rcmail_config['converse_xmpp_hostname']= function($args) {
 	return 'example.net';
 	# return preg_replace('/^.*@/', '', $args['user']);
 	# return $args['host'];
+
+  #if (strstr($args['user'], "@")){
+  #  return preg_replace('/^.*@/', '', $args['user']);
+  #} else {
+  #   $host = $_SERVER['HTTP_HOST'];
+  #   $domain = isset($host) ? $host : '';
+  #   if (preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $domain, $regs)) {
+  #     $host = $regs['domain'];
+  #   }
+  #   return $host;
+  #}
 };
 
 // Username portion of XMPP username (bare JID), example: "user"

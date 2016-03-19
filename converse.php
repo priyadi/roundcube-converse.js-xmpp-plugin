@@ -32,6 +32,7 @@ class converse extends rcube_plugin
 	private $resource_prefix = "Roundcube-"; // Resource Name = $resource_prefix+uniqid()
 	private $jsfile = 'converse.min.js';
 	private $converseconfig = array();
+    private $already_present = 0;
 
 	function init() {
 		$this->load_config();
@@ -65,7 +66,7 @@ class converse extends rcube_plugin
 		$rcmail = rcube::get_instance();
 
 		// TODO: exclude some more actions
-		if ($rcmail->task == 'login' || !empty($_REQUEST['_extwin']))
+		if ($this->already_present == 1 || $rcmail->task == 'login' || !empty($_REQUEST['_extwin']))
 			return;
 
 		// map session language with converse.js locale
@@ -189,6 +190,7 @@ class converse extends rcube_plugin
 		rcmail_converse_init(converse, args);
 	});
 	', 'foot');
+        $this->already_present = 1;
 	}
 
 	function authenticate($args) {

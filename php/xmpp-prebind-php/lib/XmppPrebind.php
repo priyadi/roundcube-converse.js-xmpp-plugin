@@ -65,9 +65,21 @@ class XmppPrebind {
 
 	protected $mechanisms = array();
 
+	// the Bosh attributes for use in a client using this prebound session
+	protected $wait;
+	protected $requests;
+	protected $ver;
+	protected $polling;
+	protected $inactivity;
+	protected $hold;
+	protected $to;
+	protected $ack;
+	protected $accept;
+	protected $maxpause;
+
 	/**
 	 * Session creation response
-	 * 
+	 *
 	 * @var DOMDocument
 	 */
 	public $response;
@@ -120,25 +132,45 @@ class XmppPrebind {
 	 *
 	 * @param string $username Username without jabber host
 	 * @param string $password Password
+	 * @param string $route Route
 	 */
-	public function connect($username, $password) {
+	public function connect($username, $password, $route = false) {
 		$this->jid      = $username . '@' . $this->jabberHost;
-		if($this->resource != null)
-            		$this->jid .= '/' . $this->resource;
+
+		if($this->resource) {
+			$this->jid .= '/' . $this->resource;
+		}
+
 		$this->password = $password;
 
-		$response = $this->sendInitialConnection();
+		$response = $this->sendInitialConnection($route);
+        if(empty($response)) {
+			throw new XmppPrebindConnectionException("No response from server.");
+        }
 
 		$body = self::getBodyFromXml($response);
-		if (is_object($body)) {
-			$this->sid = $body->getAttribute('sid');
-		} else {
-			throw new Exception('Unable to connect to XMPP server');
-		}
+        if ( empty( $body ) )
+			throw new XmppPrebindConnectionException("No body could be found in response from server.");
+		$this->sid = $body->getAttribute('sid');
+
+		// set the Bosh Attributes
+		$this->wait = $body->getAttribute('wait');
+		$this->requests = $body->getAttribute('requests');
+		$this->ver = $body->getAttribute('ver');
+		$this->polling = $body->getAttribute('polling');
+		$this->inactivity = $body->getAttribute('inactivity');
+		$this->hold = $body->getAttribute('hold');
+		$this->to = $body->getAttribute('to');
+		$this->accept = $body->getAttribute('accept');
+		$this->maxpause = $body->getAttribute('maxpause');
+
 		$this->debug($this->sid, 'sid');
 
+        if(empty($body->firstChild) || empty($body->firstChild->firstChild)) {
+			throw new XmppPrebindConnectionException("Child not found in response from server.");
+        }
 		$mechanisms = $body->getElementsByTagName('mechanism');
-		
+
 		foreach ($mechanisms as $value) {
 			$this->mechanisms[] = $value->nodeValue;
 		}
@@ -192,6 +224,27 @@ class XmppPrebind {
 		$this->sendSessionIfRequired();
 
 		return true;
+	}
+
+	/**
+	 * Get BOSH parameters to properly setup the BOSH client
+	 *
+	 * @return array
+	 */
+	public function getBoshInfo()
+	{
+		return array(
+			'wait' => $this->wait,
+			'requests' => $this->requests,
+			'ver' => $this->ver,
+			'polling' => $this->polling,
+			'inactivity' => $this->inactivity,
+			'hold' => $this->hold,
+			'to' => $this->to,
+			'ack' => $this->ack,
+			'accept' => $this->accept,
+			'maxpause' => $this->maxpause,
+		);
 	}
 
 	/**
@@ -302,9 +355,10 @@ class XmppPrebind {
 	/**
 	 * Send initial connection string
 	 *
+	 * @param string $route
 	 * @return string Response
 	 */
-	protected function sendInitialConnection() {
+	protected function sendInitialConnection($route = false) {
 		$domDocument = $this->buildBody();
 		$body = self::getBodyFromDomDocument($domDocument);
 
@@ -315,6 +369,11 @@ class XmppPrebind {
 		$body->appendChild(self::getNewTextAttribute($domDocument, 'xmlns:xmpp', self::XMLNS_BOSH));
 		$body->appendChild(self::getNewTextAttribute($domDocument, 'xmpp:version', '1.0'));
 		$body->appendChild(self::getNewTextAttribute($domDocument, 'wait', $waitTime));
+
+		if ($route)
+		{
+			$body->appendChild(self::getNewTextAttribute($domDocument, 'route', $route));
+		}
 
 		return $this->send($domDocument->saveXML());
 	}
@@ -501,11 +560,11 @@ class XmppPrebind {
 					$i = $i + 2 + $xlen;
 				}
 				if ( $flg & 8 )
-				$i = strpos($gzData, "\0", $i) + 1;
+					$i = strpos($gzData, "\0", $i) + 1;
 				if ( $flg & 16 )
-				$i = strpos($gzData, "\0", $i) + 1;
+					$i = strpos($gzData, "\0", $i) + 1;
 				if ( $flg & 2 )
-				$i = $i + 2;
+					$i = $i + 2;
 			}
 			return gzinflate( substr($gzData, $i, -8) );
 		} else {
@@ -613,7 +672,6 @@ class XmppPrebind {
 	protected function getAndIncrementRid() {
 		return $this->rid++;
 	}
-
 }
 
 /**
@@ -621,4 +679,4 @@ class XmppPrebind {
  */
 class XmppPrebindException extends Exception{}
 
-class XmppPrebindConnectionException extends XmppPrebindException {}
+class XmppPrebindConnectionException extends XmppPrebindException{}

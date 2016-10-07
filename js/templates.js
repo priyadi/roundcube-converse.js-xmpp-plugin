@@ -93,7 +93,9 @@ obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
 with (obj) {
-__p += '<div class="chat-area">\n    <div class="chat-content"></div>\n    <form class="sendXMPPMessage" action="" method="post">\n        ';
+__p += '<div class="chat-area">\n    <div class="chat-content"></div>\n    <div class="new-msgs-indicator hidden">▼ ' +
+((__t = ( unread_msgs )) == null ? '' : __t) +
+' ▼</div>\n    <form class="sendXMPPMessage" action="" method="post">\n        ';
  if (show_toolbar) { ;
 __p += '\n            <ul class="chat-toolbar no-text-select"></ul>\n        ';
  } ;
@@ -112,8 +114,6 @@ function print() { __p += __j.call(arguments, '') }
 with (obj) {
 __p += '<div class="flyout box-flyout">\n    <div class="dragresize dragresize-top"></div>\n    <div class="dragresize dragresize-topleft"></div>\n    <div class="dragresize dragresize-left"></div>\n    <div class="chat-head chat-head-chatbox">\n        <a class="chatbox-btn close-chatbox-button icon-close" title="' +
 ((__t = (info_close)) == null ? '' : __t) +
-'"></a>\n        <a class="chatbox-btn toggle-chatbox-button icon-minus" title="' +
-((__t = (info_minimize)) == null ? '' : __t) +
 '"></a>\n        <div class="chat-title">\n            ';
  if (url) { ;
 __p += '\n                <a href="' +
@@ -126,7 +126,9 @@ __p += '\n                    ' +
  if (url) { ;
 __p += '\n                </a>\n            ';
  } ;
-__p += '\n        </div>\n        <p class="user-custom-message"><p/>\n    </div>\n    <div class="chat-body">\n        <div class="chat-content"></div>\n        ';
+__p += '\n        </div>\n        <p class="user-custom-message"><p/>\n    </div>\n    <div class="chat-body">\n        <div class="chat-content"></div>\n        <div class="new-msgs-indicator hidden">▼ ' +
+((__t = ( unread_msgs )) == null ? '' : __t) +
+' ▼</div>\n        ';
  if (show_textarea) { ;
 __p += '\n        <form class="sendXMPPMessage" action="" method="post">\n            ';
  if (show_toolbar) { ;
@@ -142,11 +144,23 @@ __p += '\n    </div>\n</div>\n';
 return __p
 };
 
+this["templates"]["chatbox_minimize"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<a class="chatbox-btn toggle-chatbox-button icon-minus" title="' +
+((__t = (info_minimize)) == null ? '' : __t) +
+'"></a>\n';
+
+}
+return __p
+};
+
 this["templates"]["chatroom"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<div class="flyout box-flyout">\n    <div class="dragresize dragresize-top"></div>\n    <div class="dragresize dragresize-topleft"></div>\n    <div class="dragresize dragresize-left"></div>\n    <div class="chat-head chat-head-chatroom">\n        <a class="chatbox-btn close-chatbox-button icon-close"></a>\n        <a class="chatbox-btn toggle-chatbox-button icon-minus"></a>\n        <a class="chatbox-btn configure-chatroom-button icon-wrench" style="display:none"></a>\n        <div class="chat-title"> ' +
+__p += '<div class="flyout box-flyout">\n    <div class="dragresize dragresize-top"></div>\n    <div class="dragresize dragresize-topleft"></div>\n    <div class="dragresize dragresize-left"></div>\n    <div class="chat-head chat-head-chatroom">\n        <a class="chatbox-btn close-chatbox-button icon-close"></a>\n        <a class="chatbox-btn configure-chatroom-button icon-wrench" style="display:none"></a>\n        <div class="chat-title"> ' +
 ((__t = ( _.escape(name) )) == null ? '' : __t) +
 ' </div>\n        <p class="chatroom-topic"><p/>\n    </div>\n    <div class="chat-body chatroom-body"><span class="spinner centered"/></div>\n</div>\n';
 
@@ -159,6 +173,24 @@ obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
 __p += '<div class="chatroom-form-container">\n    <form class="pure-form pure-form-stacked converse-form chatroom-form">\n        <fieldset>\n            <span class="spinner centered"/>\n        </fieldset>\n    </form>\n</div>\n';
+
+}
+return __p
+};
+
+this["templates"]["chatroom_nickname_form"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<div class="chatroom-form-container">\n    <form class="pure-form converse-form chatroom-form">\n        <fieldset>\n            <label>' +
+((__t = (heading)) == null ? '' : __t) +
+'</label>\n            <p class="validation-message">' +
+((__t = (validation_message)) == null ? '' : __t) +
+'</p>\n            <input type="text" required="required" name="nick" class="new-chatroom-nick" placeholder="' +
+((__t = (label_nickname)) == null ? '' : __t) +
+'"/>\n        </fieldset>\n        <fieldset>\n            <input type="submit" class="pure-button button-primary" name="join" value="' +
+((__t = (label_join)) == null ? '' : __t) +
+'"/>\n        </fieldset>\n    </form>\n</div>\n';
 
 }
 return __p
@@ -182,11 +214,16 @@ return __p
 
 this["templates"]["chatroom_sidebar"] = function(obj) {
 obj || (obj = {});
-var __t, __p = '', __e = _.escape;
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
 with (obj) {
-__p += '<!-- <div class="occupants"> -->\n<form class="pure-form room-invite">\n    <input class="invited-contact" placeholder="' +
+__p += '<!-- <div class="occupants"> -->\n';
+ if (allow_muc_invitations) { ;
+__p += '\n<form class="pure-form room-invite">\n    <input class="invited-contact" placeholder="' +
 ((__t = (label_invitation)) == null ? '' : __t) +
-'" type="text"/>\n</form>\n<p class="occupants-heading">' +
+'" type="text"/>\n</form>\n';
+ } ;
+__p += '\n<p class="occupants-heading">' +
 ((__t = (label_occupants)) == null ? '' : __t) +
 ':</p>\n<ul class="occupant-list"></ul>\n<!-- </div> -->\n';
 
@@ -269,9 +306,14 @@ return __p
 
 this["templates"]["controlbox"] = function(obj) {
 obj || (obj = {});
-var __t, __p = '', __e = _.escape;
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
 with (obj) {
-__p += '<div class="flyout box-flyout">\n    <div class="dragresize dragresize-top"></div>\n    <div class="dragresize dragresize-topleft"></div>\n    <div class="dragresize dragresize-left"></div>\n    <div class="chat-head controlbox-head">\n        <ul id="controlbox-tabs"></ul>\n        <a class="chatbox-btn close-chatbox-button icon-close"></a>\n    </div>\n    <div class="controlbox-panes"></div>\n</div>\n';
+__p += '<div class="flyout box-flyout">\n    <div class="dragresize dragresize-top"></div>\n    <div class="dragresize dragresize-topleft"></div>\n    <div class="dragresize dragresize-left"></div>\n    <div class="chat-head controlbox-head">\n        <ul id="controlbox-tabs"></ul>\n        ';
+ if (!sticky_controlbox) { ;
+__p += '\n            <a class="chatbox-btn close-chatbox-button icon-close"></a>\n        ';
+ } ;
+__p += '\n    </div>\n    <div class="controlbox-panes"></div>\n</div>\n';
 
 }
 return __p
@@ -504,16 +546,20 @@ __p += '\n        <span class="spinner login-submit"/>\n    ';
 __p += '\n    ';
  if (!auto_login) { ;
 __p += '\n        ';
- if (authentication == LOGIN) { ;
+ if (authentication == LOGIN || authentication == EXTERNAL) { ;
 __p += '\n            <label>' +
 ((__t = (label_username)) == null ? '' : __t) +
 '</label>\n            <input type="text" name="jid" placeholder="' +
 ((__t = (placeholder_username)) == null ? '' : __t) +
-'">\n            <label>' +
+'">\n            ';
+ if (authentication !== EXTERNAL) { ;
+__p += '\n                <label>' +
 ((__t = (label_password)) == null ? '' : __t) +
-'</label>\n            <input type="password" name="password" placeholder="' +
+'</label>\n                <input type="password" name="password" placeholder="' +
 ((__t = (placeholder_password)) == null ? '' : __t) +
-'">\n            <input class="pure-button button-primary" type="submit" value="' +
+'">\n            ';
+ } ;
+__p += '\n            <input class="pure-button button-primary" type="submit" value="' +
 ((__t = (label_login)) == null ? '' : __t) +
 '">\n            <span class="conn-feedback"></span>\n        ';
  } ;
@@ -592,25 +638,33 @@ function print() { __p += __j.call(arguments, '') }
 with (obj) {
 __p += '<li class="' +
 ((__t = (role)) == null ? '' : __t) +
+' occupant" id="' +
+((__t = (id)) == null ? '' : __t) +
 '"\n    ';
  if (role === "moderator") { ;
 __p += '\n       title="' +
 ((__t = (desc_moderator)) == null ? '' : __t) +
+' ' +
+((__t = (hint_occupant)) == null ? '' : __t) +
 '"\n    ';
  } ;
 __p += '\n    ';
  if (role === "occupant") { ;
 __p += '\n       title="' +
 ((__t = (desc_occupant)) == null ? '' : __t) +
+' ' +
+((__t = (hint_occupant)) == null ? '' : __t) +
 '"\n    ';
  } ;
 __p += '\n    ';
  if (role === "visitor") { ;
 __p += '\n       title="' +
 ((__t = (desc_visitor)) == null ? '' : __t) +
+' ' +
+((__t = (hint_occupant)) == null ? '' : __t) +
 '"\n    ';
  } ;
-__p += '\n>' +
+__p += '>' +
 ((__t = (nick)) == null ? '' : __t) +
 '</li>\n';
 
@@ -890,13 +944,7 @@ __p += '<form class="pure-form pure-form-stacked converse-form add-chatroom" act
 ((__t = (label_room_name)) == null ? '' : __t) +
 '</label>\n        <input type="text" name="chatroom" class="new-chatroom-name" placeholder="' +
 ((__t = (label_room_name)) == null ? '' : __t) +
-'"/>\n        <label>' +
-((__t = (label_nickname)) == null ? '' : __t) +
-'</label> <input type="text" name="nick" class="new-chatroom-nick" placeholder="' +
-((__t = (label_nickname)) == null ? '' : __t) +
-'"/>\n        <input type="submit" class="pure-button button-primary" name="join" value="' +
-((__t = (label_join)) == null ? '' : __t) +
-'"/>\n    </fieldset>\n    <fieldset>\n        ';
+'"/>\n        ';
  if (server_input_type != 'hidden') { ;
 __p += '\n            <label' +
 ((__t = (server_label_global_attr)) == null ? '' : __t) +
@@ -908,6 +956,8 @@ __p += '\n        <input type="' +
 ((__t = (server_input_type)) == null ? '' : __t) +
 '" name="server" class="new-chatroom-server" placeholder="' +
 ((__t = (label_server)) == null ? '' : __t) +
+'"/>\n        <input type="submit" class="pure-button button-primary" name="join" value="' +
+((__t = (label_join)) == null ? '' : __t) +
 '"/>\n        <input type="button" class="pure-button button-secondary" name="show" id="show-rooms" value="' +
 ((__t = (label_show_rooms)) == null ? '' : __t) +
 '"/>\n    </fieldset>\n</form>\n<dl id="available-chatrooms"></dl>\n';
@@ -918,14 +968,77 @@ return __p
 
 this["templates"]["roster"] = function(obj) {
 obj || (obj = {});
-var __t, __p = '', __e = _.escape;
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
 with (obj) {
-__p += '<form class="pure-form roster-filter-group input-button-group">\n    <input style="display: none;" class="roster-filter" placeholder="' +
+__p += '<form class="pure-form roster-filter-group input-button-group">\n    <input value="' +
+((__t = (filter_text)) == null ? '' : __t) +
+'" class="roster-filter"\n           placeholder="' +
 ((__t = (placeholder)) == null ? '' : __t) +
-'">\n    <select style="display: none;" class="filter-type">\n        <option value="contacts">' +
+'"\n           ';
+ if (filter_type === 'state') { ;
+__p += '  style="display: none" ';
+ } ;
+__p += ' >\n    <select class="state-type" ';
+ if (filter_type !== 'state') { ;
+__p += '  style="display: none" ';
+ } ;
+__p += ' >\n        <option value="">' +
+((__t = (label_any)) == null ? '' : __t) +
+'</option>\n        <option ';
+ if (chat_state === 'online') { ;
+__p += ' selected="selected" ';
+ } ;
+__p += '\n            value="online">' +
+((__t = (label_online)) == null ? '' : __t) +
+'</option>\n        <option ';
+ if (chat_state === 'chat') { ;
+__p += ' selected="selected" ';
+ } ;
+__p += '\n            value="chat">' +
+((__t = (label_chatty)) == null ? '' : __t) +
+'</option>\n        <option ';
+ if (chat_state === 'dnd') { ;
+__p += ' selected="selected" ';
+ } ;
+__p += '\n            value="dnd">' +
+((__t = (label_busy)) == null ? '' : __t) +
+'</option>\n        <option ';
+ if (chat_state === 'away') { ;
+__p += ' selected="selected" ';
+ } ;
+__p += '\n            value="away">' +
+((__t = (label_away)) == null ? '' : __t) +
+'</option>\n        <option ';
+ if (chat_state === 'xa') { ;
+__p += ' selected="selected" ';
+ } ;
+__p += '\n            value="xa">' +
+((__t = (label_xa)) == null ? '' : __t) +
+'</option>\n        <option ';
+ if (chat_state === 'offline') { ;
+__p += ' selected="selected" ';
+ } ;
+__p += '\n            value="offline">' +
+((__t = (label_offline)) == null ? '' : __t) +
+'</option>\n    </select>\n    <select class="filter-type">\n        <option ';
+ if (filter_type === 'contacts') { ;
+__p += ' selected="selected" ';
+ } ;
+__p += '\n                value="contacts">' +
 ((__t = (label_contacts)) == null ? '' : __t) +
-'</option>\n        <option value="groups">' +
+'</option>\n        <option ';
+ if (filter_type === 'groups') { ;
+__p += ' selected="selected" ';
+ } ;
+__p += '\n                value="groups">' +
 ((__t = (label_groups)) == null ? '' : __t) +
+'</option>\n        <option ';
+ if (filter_type === 'state') { ;
+__p += ' selected="selected" ';
+ } ;
+__p += '\n                value="state">' +
+((__t = (label_state)) == null ? '' : __t) +
 '</option>\n    </select>\n</form>\n';
 
 }

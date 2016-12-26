@@ -1,18 +1,20 @@
-this["JST"] = this["JST"] || {};
+this["templates"] = this["templates"] || {};
 
-this["JST"]["action"] = function(obj) {
+this["templates"]["action"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
 __p += '<div class="chat-message ' +
 ((__t = (extra_classes)) == null ? '' : __t) +
-'">\n    <span class="chat-message-' +
+'" data-isodate="' +
+((__t = (isodate)) == null ? '' : __t) +
+'">\n    <span class="chat-msg-author chat-msg-' +
 ((__t = (sender)) == null ? '' : __t) +
 '">' +
 ((__t = (time)) == null ? '' : __t) +
 ' **' +
 ((__t = (username)) == null ? '' : __t) +
-' </span>\n    <span class="chat-message-content">' +
+' </span>\n    <span class="chat-msg-content">' +
 ((__t = (message)) == null ? '' : __t) +
 '</span>\n</div>\n';
 
@@ -20,13 +22,13 @@ __p += '<div class="chat-message ' +
 return __p
 };
 
-this["JST"]["add_contact_dropdown"] = function(obj) {
+this["templates"]["add_contact_dropdown"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<dl class="add-converse-contact dropdown">\n    <dt id="xmpp-contact-search" class="fancy-dropdown">\n        <a class="toggle-xmpp-contact-form" href="#"\n            title="' +
+__p += '<dl class="add-converse-contact dropdown">\n    <dt id="xmpp-contact-search" class="fancy-dropdown">\n        <a class="toggle-xmpp-contact-form icon-plus" href="#" title="' +
 ((__t = (label_click_to_chat)) == null ? '' : __t) +
-'">\n        <span class="icon-plus"></span>' +
+'"> ' +
 ((__t = (label_add_contact)) == null ? '' : __t) +
 '</a>\n    </dt>\n    <dd class="search-xmpp" style="display:none"><ul></ul></dd>\n</dl>\n';
 
@@ -34,51 +36,51 @@ __p += '<dl class="add-converse-contact dropdown">\n    <dt id="xmpp-contact-sea
 return __p
 };
 
-this["JST"]["add_contact_form"] = function(obj) {
+this["templates"]["add_contact_form"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<li>\n    <form class="add-xmpp-contact">\n        <input type="text"\n            name="identifier"\n            class="username"\n            placeholder="' +
+__p += '<li>\n    <form class="pure-form add-xmpp-contact">\n        <input type="text"\n            name="identifier"\n            class="username"\n            placeholder="' +
 ((__t = (label_contact_username)) == null ? '' : __t) +
-'"/>\n        <button type="submit">' +
+'"/>\n        <button class="pure-button button-primary" type="submit">' +
 ((__t = (label_add)) == null ? '' : __t) +
-'</button>\n    </form>\n<li>\n';
+'</button>\n    </form>\n</li>\n';
 
 }
 return __p
 };
 
-this["JST"]["change_status_message"] = function(obj) {
+this["templates"]["change_status_message"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<form id="set-custom-xmpp-status">\n    <input type="text" class="custom-xmpp-status" ' +
+__p += '<form id="set-custom-xmpp-status" class="pure-form">\n<fieldset>\n    <span class="input-button-group">\n        <input type="text" class="custom-xmpp-status" ' +
 ((__t = (status_message)) == null ? '' : __t) +
-'\n        placeholder="' +
+' placeholder="' +
 ((__t = (label_custom_status)) == null ? '' : __t) +
-'"/>\n    <button type="submit">' +
+'"/>\n        <input type="submit" class="pure-button button-primary" value="' +
 ((__t = (label_save)) == null ? '' : __t) +
-'</button>\n</form>\n';
+'"/>\n    </span>\n</fieldset>\n</form>\n';
 
 }
 return __p
 };
 
-this["JST"]["chat_status"] = function(obj) {
+this["templates"]["chat_status"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
 __p += '<div class="xmpp-status">\n    <a class="choose-xmpp-status ' +
 ((__t = (chat_status)) == null ? '' : __t) +
-'"\n       data-value="' +
-((__t = (status_message)) == null ? '' : __t) +
-'"\n       href="#" title="' +
-((__t = (desc_change_status)) == null ? '' : __t) +
-'">\n\n        <span class="icon-' +
+' icon-' +
 ((__t = (chat_status)) == null ? '' : __t) +
-'"></span>' +
+'" data-value="' +
 ((__t = (status_message)) == null ? '' : __t) +
-'\n    </a>\n    <a class="change-xmpp-status-message icon-pencil"\n        href="#"\n        title="' +
+'" href="#" title="' +
+((__t = (desc_change_status)) == null ? '' : __t) +
+'">\n        ' +
+((__t = (status_message)) == null ? '' : __t) +
+'\n    </a>\n    <a class="change-xmpp-status-message icon-pencil" href="#" title="' +
 ((__t = (desc_custom_status)) == null ? '' : __t) +
 '"></a>\n</div>\n';
 
@@ -86,7 +88,7 @@ __p += '<div class="xmpp-status">\n    <a class="choose-xmpp-status ' +
 return __p
 };
 
-this["JST"]["chatarea"] = function(obj) {
+this["templates"]["chatarea"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -103,87 +105,96 @@ __p += '\n        <textarea type="text" class="chat-textarea" \n            plac
 return __p
 };
 
-this["JST"]["chatbox"] = function(obj) {
+this["templates"]["chatbox"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
 with (obj) {
-__p += '<div class="box-flyout" style="height: ' +
-((__t = (height)) == null ? '' : __t) +
-'px">\n    <div class="dragresize dragresize-tm"></div>\n    <div class="chat-head chat-head-chatbox">\n        <a class="close-chatbox-button icon-close"></a>\n        <a class="toggle-chatbox-button icon-minus"></a>\n        <div class="chat-title">\n            ';
+__p += '<div class="flyout box-flyout">\n    <div class="dragresize dragresize-top"></div>\n    <div class="dragresize dragresize-topleft"></div>\n    <div class="dragresize dragresize-left"></div>\n    <div class="chat-head chat-head-chatbox">\n        <a class="chatbox-btn close-chatbox-button icon-close" title="' +
+((__t = (info_close)) == null ? '' : __t) +
+'"></a>\n        <a class="chatbox-btn toggle-chatbox-button icon-minus" title="' +
+((__t = (info_minimize)) == null ? '' : __t) +
+'"></a>\n        <div class="chat-title">\n            ';
  if (url) { ;
 __p += '\n                <a href="' +
 ((__t = (url)) == null ? '' : __t) +
-'" target="_blank" class="user">\n            ';
+'" target="_blank" rel="noopener" class="user">\n            ';
  } ;
 __p += '\n                    ' +
-((__t = ( fullname )) == null ? '' : __t) +
+((__t = ( title )) == null ? '' : __t) +
 '\n            ';
  if (url) { ;
 __p += '\n                </a>\n            ';
  } ;
-__p += '\n        </div>\n        <p class="user-custom-message"><p/>\n    </div>\n    <div class="chat-body">\n        <div class="chat-content"></div>\n        <form class="sendXMPPMessage" action="" method="post">\n            ';
+__p += '\n        </div>\n        <p class="user-custom-message"><p/>\n    </div>\n    <div class="chat-body">\n        <div class="chat-content"></div>\n        ';
+ if (show_textarea) { ;
+__p += '\n        <form class="sendXMPPMessage" action="" method="post">\n            ';
  if (show_toolbar) { ;
 __p += '\n                <ul class="chat-toolbar no-text-select"></ul>\n            ';
  } ;
 __p += '\n        <textarea\n            type="text"\n            class="chat-textarea"\n            placeholder="' +
 ((__t = (label_personal_message)) == null ? '' : __t) +
-'"/>\n        </form>\n    </div>\n</div>\n';
-
-}
-return __p
-};
-
-this["JST"]["chatroom"] = function(obj) {
-obj || (obj = {});
-var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
-function print() { __p += __j.call(arguments, '') }
-with (obj) {
-__p += '<div class="box-flyout" style="height: ' +
-((__t = (height)) == null ? '' : __t) +
-'px"\n    ';
- if (minimized) { ;
-__p += ' style="display:none" ';
+'"/>\n        </form>\n        ';
  } ;
-__p += '>\n    <div class="dragresize dragresize-tm"></div>\n    <div class="chat-head chat-head-chatroom">\n        <a class="close-chatbox-button icon-close"></a>\n        <a class="toggle-chatbox-button icon-minus"></a>\n        <a class="configure-chatroom-button icon-wrench" style="display:none"></a>\n        <div class="chat-title"> ' +
-((__t = ( name )) == null ? '' : __t) +
-' </div>\n        <p class="chatroom-topic"><p/>\n    </div>\n    <div class="chat-body"><span class="spinner centered"/></div>\n</div>\n';
+__p += '\n    </div>\n</div>\n';
 
 }
 return __p
 };
 
-this["JST"]["chatroom_password_form"] = function(obj) {
+this["templates"]["chatroom"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<div class="chatroom-form-container">\n    <form class="chatroom-form">\n        <legend>' +
+__p += '<div class="flyout box-flyout">\n    <div class="dragresize dragresize-top"></div>\n    <div class="dragresize dragresize-topleft"></div>\n    <div class="dragresize dragresize-left"></div>\n    <div class="chat-head chat-head-chatroom">\n        <a class="chatbox-btn close-chatbox-button icon-close"></a>\n        <a class="chatbox-btn toggle-chatbox-button icon-minus"></a>\n        <a class="chatbox-btn configure-chatroom-button icon-wrench" style="display:none"></a>\n        <div class="chat-title"> ' +
+((__t = ( _.escape(name) )) == null ? '' : __t) +
+' </div>\n        <p class="chatroom-topic"><p/>\n    </div>\n    <div class="chat-body chatroom-body"><span class="spinner centered"/></div>\n</div>\n';
+
+}
+return __p
+};
+
+this["templates"]["chatroom_form"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<div class="chatroom-form-container">\n    <form class="pure-form pure-form-stacked converse-form chatroom-form">\n        <fieldset>\n            <span class="spinner centered"/>\n        </fieldset>\n    </form>\n</div>\n';
+
+}
+return __p
+};
+
+this["templates"]["chatroom_password_form"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<div class="chatroom-form-container">\n    <form class="pure-form converse-form chatroom-form">\n        <fieldset>\n            <legend>' +
 ((__t = (heading)) == null ? '' : __t) +
-'</legend>\n        <label>' +
+'</legend>\n            <label>' +
 ((__t = (label_password)) == null ? '' : __t) +
-'<input type="password" name="password"/></label>\n        <input type="submit" value="' +
+'</label>\n            <input type="password" name="password"/>\n        </fieldset>\n        <fieldset>\n            <input class="pure-button button-primary" type="submit" value="' +
 ((__t = (label_submit)) == null ? '' : __t) +
-'"/>\n    </form>\n</div>\n';
+'"/>\n        </fieldset>\n    </form>\n</div>\n';
 
 }
 return __p
 };
 
-this["JST"]["chatroom_sidebar"] = function(obj) {
+this["templates"]["chatroom_sidebar"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<!-- <div class="participants"> -->\n<form class="room-invite">\n    <input class="invited-contact" placeholder="' +
+__p += '<!-- <div class="occupants"> -->\n<form class="pure-form room-invite">\n    <input class="invited-contact" placeholder="' +
 ((__t = (label_invitation)) == null ? '' : __t) +
-'" type="text"/>\n</form>\n<label>' +
+'" type="text"/>\n</form>\n<p class="occupants-heading">' +
 ((__t = (label_occupants)) == null ? '' : __t) +
-':</label>\n<ul class="participant-list"></ul>\n<!-- </div> -->\n';
+':</p>\n<ul class="occupant-list"></ul>\n<!-- </div> -->\n';
 
 }
 return __p
 };
 
-this["JST"]["chatrooms_tab"] = function(obj) {
+this["templates"]["chatrooms_tab"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
@@ -195,17 +206,17 @@ __p += '<li><a class="s" href="#chatrooms">' +
 return __p
 };
 
-this["JST"]["chats_panel"] = function(obj) {
+this["templates"]["chats_panel"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<div id="minimized-chats">\n    <a id="toggle-minimized-chats" href="#"></a>\n    <div class="minimized-chats-flyout"></div>\n</div>\n';
+__p += '<div id="minimized-chats">\n    <a id="toggle-minimized-chats" href="#"></a>\n    <div class="flyout minimized-chats-flyout"></div>\n</div>\n';
 
 }
 return __p
 };
 
-this["JST"]["choose_status"] = function(obj) {
+this["templates"]["choose_status"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
@@ -215,20 +226,24 @@ __p += '<dl id="target" class="dropdown">\n    <dt id="fancy-xmpp-status-select"
 return __p
 };
 
-this["JST"]["contacts_panel"] = function(obj) {
+this["templates"]["contacts_panel"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
 with (obj) {
-__p += '<form class="set-xmpp-status" action="" method="post">\n    <span id="xmpp-status-holder">\n        <select id="select-xmpp-status" style="display:none">\n            <option value="online">' +
+__p += '<form class="pure-form set-xmpp-status" action="" method="post">\n    <span id="xmpp-status-holder">\n        <select id="select-xmpp-status" style="display:none">\n            <option value="online">' +
 ((__t = (label_online)) == null ? '' : __t) +
 '</option>\n            <option value="dnd">' +
 ((__t = (label_busy)) == null ? '' : __t) +
 '</option>\n            <option value="away">' +
 ((__t = (label_away)) == null ? '' : __t) +
-'</option>\n            <option value="offline">' +
+'</option>\n            ';
+ if (include_offline_state)  { ;
+__p += '\n            <option value="offline">' +
 ((__t = (label_offline)) == null ? '' : __t) +
 '</option>\n            ';
+ } ;
+__p += '\n            ';
  if (allow_logout)  { ;
 __p += '\n            <option value="logout">' +
 ((__t = (label_logout)) == null ? '' : __t) +
@@ -240,7 +255,7 @@ __p += '\n        </select>\n    </span>\n</form>\n';
 return __p
 };
 
-this["JST"]["contacts_tab"] = function(obj) {
+this["templates"]["contacts_tab"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
@@ -252,19 +267,17 @@ __p += '<li><a class="s current" href="#users">' +
 return __p
 };
 
-this["JST"]["controlbox"] = function(obj) {
+this["templates"]["controlbox"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<div class="box-flyout" style="height: ' +
-((__t = (height)) == null ? '' : __t) +
-'px">\n    <div class="dragresize dragresize-tm"></div>\n    <div class="chat-head controlbox-head">\n        <ul id="controlbox-tabs"></ul>\n        <a class="close-chatbox-button icon-close"></a>\n    </div>\n    <div class="controlbox-panes"></div>\n</div>\n';
+__p += '<div class="flyout box-flyout">\n    <div class="dragresize dragresize-top"></div>\n    <div class="dragresize dragresize-topleft"></div>\n    <div class="dragresize dragresize-left"></div>\n    <div class="chat-head controlbox-head">\n        <ul id="controlbox-tabs"></ul>\n        <a class="chatbox-btn close-chatbox-button icon-close"></a>\n    </div>\n    <div class="controlbox-panes"></div>\n</div>\n';
 
 }
 return __p
 };
 
-this["JST"]["controlbox_toggle"] = function(obj) {
+this["templates"]["controlbox_toggle"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
@@ -276,73 +289,182 @@ __p += '<span class="conn-feedback">' +
 return __p
 };
 
-this["JST"]["field"] = function(obj) {
+this["templates"]["field"] = function(obj) {
 obj || (obj = {});
-var __t, __p = '', __e = _.escape;
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
 with (obj) {
 __p += '<field var="' +
 ((__t = (name)) == null ? '' : __t) +
-'"><value>' +
+'">';
+ if (_.isArray(value)) { ;
+__p += '\n    ';
+ _.each(value,function(arrayValue) { ;
+__p += '<value>' +
+((__t = (arrayValue)) == null ? '' : __t) +
+'</value>';
+ }); ;
+__p += '\n';
+ } else { ;
+__p += '\n    <value>' +
 ((__t = (value)) == null ? '' : __t) +
-'</value></field>\n';
+'</value>\n';
+ } ;
+__p += '</field>\n';
 
 }
 return __p
 };
 
-this["JST"]["form_checkbox"] = function(obj) {
+this["templates"]["form_captcha"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
+with (obj) {
+
+ if (label) { ;
+__p += '\n<label>\n    ' +
+((__t = (label)) == null ? '' : __t) +
+'\n</label>\n';
+ } ;
+__p += '\n<img src="data:' +
+((__t = (type)) == null ? '' : __t) +
+';base64,' +
+((__t = (data)) == null ? '' : __t) +
+'">\n<input name="' +
+((__t = (name)) == null ? '' : __t) +
+'" type="text" ';
+ if (required) { ;
+__p += ' class="required" ';
+ } ;
+__p += ' >\n\n\n';
+
+}
+return __p
+};
+
+this["templates"]["form_checkbox"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
 __p += '<label>' +
 ((__t = (label)) == null ? '' : __t) +
-'<input name="' +
+'</label>\n<input name="' +
 ((__t = (name)) == null ? '' : __t) +
 '" type="' +
 ((__t = (type)) == null ? '' : __t) +
 '" ' +
 ((__t = (checked)) == null ? '' : __t) +
-'></label>\n';
+'>\n';
 
 }
 return __p
 };
 
-this["JST"]["form_input"] = function(obj) {
+this["templates"]["form_input"] = function(obj) {
 obj || (obj = {});
-var __t, __p = '', __e = _.escape;
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
 with (obj) {
-__p += '<label>' +
+
+ if (label) { ;
+__p += '\n<label>\n    ' +
 ((__t = (label)) == null ? '' : __t) +
-'<input name="' +
+'\n</label>\n';
+ } ;
+__p += '\n<input name="' +
 ((__t = (name)) == null ? '' : __t) +
 '" type="' +
 ((__t = (type)) == null ? '' : __t) +
-'" value="' +
+'" \n    ';
+ if (value) { ;
+__p += ' value="' +
 ((__t = (value)) == null ? '' : __t) +
-'"></label>\n';
+'" ';
+ } ;
+__p += '\n    ';
+ if (required) { ;
+__p += ' class="required" ';
+ } ;
+__p += ' >\n';
 
 }
 return __p
 };
 
-this["JST"]["form_select"] = function(obj) {
+this["templates"]["form_select"] = function(obj) {
 obj || (obj = {});
-var __t, __p = '', __e = _.escape;
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
 with (obj) {
 __p += '<label>' +
 ((__t = (label)) == null ? '' : __t) +
-'<select name="' +
+'</label>\n<select name="' +
 ((__t = (name)) == null ? '' : __t) +
-'">' +
+'"  ';
+ if (multiple) { ;
+__p += ' multiple="multiple" ';
+ } ;
+__p += '>' +
 ((__t = (options)) == null ? '' : __t) +
-'</select></label>\n';
+'</select>\n';
 
 }
 return __p
 };
 
-this["JST"]["group_header"] = function(obj) {
+this["templates"]["form_textarea"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<label class="label-ta">' +
+((__t = (label)) == null ? '' : __t) +
+'</label>\n<textarea name="' +
+((__t = (name)) == null ? '' : __t) +
+'">' +
+((__t = (value)) == null ? '' : __t) +
+'</textarea>\n';
+
+}
+return __p
+};
+
+this["templates"]["form_username"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
+with (obj) {
+
+ if (label) { ;
+__p += '\n<label>\n    ' +
+((__t = (label)) == null ? '' : __t) +
+'\n</label>\n';
+ } ;
+__p += '\n<div class="input-group">\n    <input name="' +
+((__t = (name)) == null ? '' : __t) +
+'" type="' +
+((__t = (type)) == null ? '' : __t) +
+'"\n        ';
+ if (value) { ;
+__p += ' value="' +
+((__t = (value)) == null ? '' : __t) +
+'" ';
+ } ;
+__p += '\n        ';
+ if (required) { ;
+__p += ' class="required" ';
+ } ;
+__p += ' />\n    <span title="' +
+((__t = (domain)) == null ? '' : __t) +
+'">' +
+((__t = (domain)) == null ? '' : __t) +
+'</span>\n</div>\n';
+
+}
+return __p
+};
+
+this["templates"]["group_header"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
@@ -358,7 +480,7 @@ __p += '<a href="#" class="group-toggle icon-' +
 return __p
 };
 
-this["JST"]["info"] = function(obj) {
+this["templates"]["info"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
@@ -370,27 +492,54 @@ __p += '<div class="chat-info">' +
 return __p
 };
 
-this["JST"]["login_panel"] = function(obj) {
+this["templates"]["login_panel"] = function(obj) {
 obj || (obj = {});
-var __t, __p = '', __e = _.escape;
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
 with (obj) {
-__p += '<form id="converse-login" method="post">\n    <label>' +
+__p += '<form class="pure-form pure-form-stacked converse-form" id="converse-login" method="post">\n    ';
+ if (auto_login) { ;
+__p += '\n        <span class="spinner login-submit"/>\n    ';
+ } ;
+__p += '\n    ';
+ if (!auto_login) { ;
+__p += '\n        ';
+ if (authentication == LOGIN) { ;
+__p += '\n            <label>' +
 ((__t = (label_username)) == null ? '' : __t) +
-'</label>\n    <input type="username" name="jid" placeholder="Username">\n    <label>' +
+'</label>\n            <input type="text" name="jid" placeholder="' +
+((__t = (placeholder_username)) == null ? '' : __t) +
+'">\n            <label>' +
 ((__t = (label_password)) == null ? '' : __t) +
-'</label>\n    <input type="password" name="password" placeholder="Password">\n    <input class="login-submit" type="submit" value="' +
+'</label>\n            <input type="password" name="password" placeholder="' +
+((__t = (placeholder_password)) == null ? '' : __t) +
+'">\n            <input class="pure-button button-primary" type="submit" value="' +
 ((__t = (label_login)) == null ? '' : __t) +
-'">\n    <span class="conn-feedback"></span>\n</form">\n';
+'">\n            <span class="conn-feedback"></span>\n        ';
+ } ;
+__p += '\n        ';
+ if (authentication == ANONYMOUS) { ;
+__p += '\n            <input type="pure-button button-primary" class="submit login-anon" value="' +
+((__t = (label_anon_login)) == null ? '' : __t) +
+'"/>\n        ';
+ } ;
+__p += '\n        ';
+ if (authentication == PREBIND) { ;
+__p += '\n            <p>Disconnected.</p>\n        ';
+ } ;
+__p += '\n    ';
+ } ;
+__p += '\n</form>\n';
 
 }
 return __p
 };
 
-this["JST"]["login_tab"] = function(obj) {
+this["templates"]["login_tab"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<li><a class="current" href="#login">' +
+__p += '<li><a class="current" href="#login-dialog">' +
 ((__t = (label_sign_in)) == null ? '' : __t) +
 '</a></li>\n';
 
@@ -398,19 +547,23 @@ __p += '<li><a class="current" href="#login">' +
 return __p
 };
 
-this["JST"]["message"] = function(obj) {
+this["templates"]["message"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
 __p += '<div class="chat-message ' +
 ((__t = (extra_classes)) == null ? '' : __t) +
-'">\n    <span class="chat-message-' +
+'" data-isodate="' +
+((__t = (isodate)) == null ? '' : __t) +
+'" data-msgid="' +
+((__t = (msgid)) == null ? '' : __t) +
+'">\n    <span class="chat-msg-author chat-msg-' +
 ((__t = (sender)) == null ? '' : __t) +
 '">' +
 ((__t = (time)) == null ? '' : __t) +
 ' ' +
 ((__t = (username)) == null ? '' : __t) +
-':&nbsp;</span>\n    <span class="chat-message-content">' +
+':&nbsp;</span>\n    <span class="chat-msg-content">' +
 ((__t = (message)) == null ? '' : __t) +
 '</span>\n</div>\n';
 
@@ -418,11 +571,11 @@ __p += '<div class="chat-message ' +
 return __p
 };
 
-this["JST"]["new_day"] = function(obj) {
+this["templates"]["new_day"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<time class="chat-date" datetime="' +
+__p += '<time class="chat-info chat-date" data-isodate="' +
 ((__t = (isodate)) == null ? '' : __t) +
 '">' +
 ((__t = (datestring)) == null ? '' : __t) +
@@ -432,7 +585,7 @@ __p += '<time class="chat-date" datetime="' +
 return __p
 };
 
-this["JST"]["occupant"] = function(obj) {
+this["templates"]["occupant"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -446,9 +599,9 @@ __p += '\n       title="' +
 '"\n    ';
  } ;
 __p += '\n    ';
- if (role === "participant") { ;
+ if (role === "occupant") { ;
 __p += '\n       title="' +
-((__t = (desc_participant)) == null ? '' : __t) +
+((__t = (desc_occupant)) == null ? '' : __t) +
 '"\n    ';
  } ;
 __p += '\n    ';
@@ -465,13 +618,26 @@ __p += '\n>' +
 return __p
 };
 
-this["JST"]["pending_contact"] = function(obj) {
+this["templates"]["pending_contact"] = function(obj) {
 obj || (obj = {});
-var __t, __p = '', __e = _.escape;
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
 with (obj) {
-__p += '<span class="pending-contact-name">' +
+
+ if (allow_chat_pending_contacts)  { ;
+__p += '\n<a class="open-chat"href="#">\n';
+ } ;
+__p += '\n<span class="pending-contact-name" title="Name: ' +
 ((__t = (fullname)) == null ? '' : __t) +
-'</span> <a class="remove-xmpp-contact icon-remove" title="' +
+'\nJID: ' +
+((__t = (jid)) == null ? '' : __t) +
+'">' +
+((__t = (fullname)) == null ? '' : __t) +
+'</span> \n';
+ if (allow_chat_pending_contacts)  { ;
+__p += '\n</a>\n';
+ } ;
+__p += '\n<a class="remove-xmpp-contact icon-remove" title="' +
 ((__t = (desc_remove)) == null ? '' : __t) +
 '" href="#"></a>\n';
 
@@ -479,11 +645,11 @@ __p += '<span class="pending-contact-name">' +
 return __p
 };
 
-this["JST"]["pending_contacts"] = function(obj) {
+this["templates"]["pending_contacts"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<dt id="pending-xmpp-contacts"><a href="#" class="group-toggle icon-' +
+__p += '<dt class="roster-group" id="pending-xmpp-contacts"><a href="#" class="group-toggle icon-' +
 ((__t = (toggle_state)) == null ? '' : __t) +
 '" title="' +
 ((__t = (desc_group_toggle)) == null ? '' : __t) +
@@ -495,13 +661,94 @@ __p += '<dt id="pending-xmpp-contacts"><a href="#" class="group-toggle icon-' +
 return __p
 };
 
-this["JST"]["requesting_contact"] = function(obj) {
+this["templates"]["register_panel"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<span class="req-contact-name">' +
+__p += '<form id="converse-register" class="pure-form converse-form">\n    <span class="reg-feedback"></span>\n    <label>' +
+((__t = (label_domain)) == null ? '' : __t) +
+'</label>\n    <input type="text" name="domain" placeholder="' +
+((__t = (domain_placeholder)) == null ? '' : __t) +
+'">\n    <p class="form-help">' +
+((__t = (help_providers)) == null ? '' : __t) +
+' <a href="' +
+((__t = (href_providers)) == null ? '' : __t) +
+'" class="url" target="_blank" rel="noopener">' +
+((__t = (help_providers_link)) == null ? '' : __t) +
+'</a>.</p>\n    <input class="pure-button button-primary" type="submit" value="' +
+((__t = (label_register)) == null ? '' : __t) +
+'">\n</form>\n';
+
+}
+return __p
+};
+
+this["templates"]["register_tab"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<li><a class="s" href="#register">' +
+((__t = (label_register)) == null ? '' : __t) +
+'</a></li>\n';
+
+}
+return __p
+};
+
+this["templates"]["registration_form"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<p class="provider-title">' +
+((__t = (domain)) == null ? '' : __t) +
+'</p>\n<a href=\'https://xmpp.net/result.php?domain=' +
+((__t = (domain)) == null ? '' : __t) +
+'&amp;type=client\'>\n    <img class="provider-score" src=\'https://xmpp.net/badge.php?domain=' +
+((__t = (domain)) == null ? '' : __t) +
+'\' alt=\'xmpp.net score\' />\n</a>\n<p class="title">' +
+((__t = (title)) == null ? '' : __t) +
+'</p>\n<p class="instructions">' +
+((__t = (instructions)) == null ? '' : __t) +
+'</p>\n';
+
+}
+return __p
+};
+
+this["templates"]["registration_request"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<span class="spinner login-submit"/>\n<p class="info">' +
+((__t = (info_message)) == null ? '' : __t) +
+'</p>\n<button class="pure-button button-cancel hor_centered">' +
+((__t = (cancel)) == null ? '' : __t) +
+'</button>\n';
+
+}
+return __p
+};
+
+this["templates"]["requesting_contact"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
+with (obj) {
+
+ if (allow_chat_pending_contacts)  { ;
+__p += '\n<a class="open-chat"href="#">\n';
+ } ;
+__p += '\n<span class="req-contact-name" title="Name: ' +
 ((__t = (fullname)) == null ? '' : __t) +
-'</span>\n<span class="request-actions">\n    <a class="accept-xmpp-request icon-checkmark" title="' +
+'\nJID: ' +
+((__t = (jid)) == null ? '' : __t) +
+'">' +
+((__t = (fullname)) == null ? '' : __t) +
+'</span>\n';
+ if (allow_chat_pending_contacts)  { ;
+__p += '\n</a>\n';
+ } ;
+__p += '\n<span class="request-actions">\n    <a class="accept-xmpp-request icon-checkmark" title="' +
 ((__t = (desc_accept)) == null ? '' : __t) +
 '" href="#"></a>\n    <a class="decline-xmpp-request icon-close" title="' +
 ((__t = (desc_decline)) == null ? '' : __t) +
@@ -511,11 +758,11 @@ __p += '<span class="req-contact-name">' +
 return __p
 };
 
-this["JST"]["requesting_contacts"] = function(obj) {
+this["templates"]["requesting_contacts"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<dt id="xmpp-contact-requests"><a href="#" class="group-toggle icon-' +
+__p += '<dt class="roster-group" id="xmpp-contact-requests"><a href="#" class="group-toggle icon-' +
 ((__t = (toggle_state)) == null ? '' : __t) +
 '" title="' +
 ((__t = (desc_group_toggle)) == null ? '' : __t) +
@@ -527,7 +774,7 @@ __p += '<dt id="xmpp-contact-requests"><a href="#" class="group-toggle icon-' +
 return __p
 };
 
-this["JST"]["room_description"] = function(obj) {
+this["templates"]["room_description"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -614,7 +861,7 @@ __p += '\n    </ul>\n</p>\n</div>\n';
 return __p
 };
 
-this["JST"]["room_item"] = function(obj) {
+this["templates"]["room_item"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
@@ -623,7 +870,7 @@ __p += '<dd class="available-chatroom">\n<a class="open-room" data-room-jid="' +
 '"\n   title="' +
 ((__t = (open_title)) == null ? '' : __t) +
 '" href="#">' +
-((__t = (name)) == null ? '' : __t) +
+((__t = (_.escape(name))) == null ? '' : __t) +
 '</a>\n<a class="room-info icon-room-info" data-room-jid="' +
 ((__t = (jid)) == null ? '' : __t) +
 '"\n   title="' +
@@ -634,49 +881,69 @@ __p += '<dd class="available-chatroom">\n<a class="open-room" data-room-jid="' +
 return __p
 };
 
-this["JST"]["room_panel"] = function(obj) {
+this["templates"]["room_panel"] = function(obj) {
 obj || (obj = {});
-var __t, __p = '', __e = _.escape;
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
 with (obj) {
-__p += '<form class="add-chatroom" action="" method="post">\n    <input type="text" name="chatroom" class="new-chatroom-name"\n        placeholder="' +
+__p += '<form class="pure-form pure-form-stacked converse-form add-chatroom" action="" method="post">\n    <fieldset>\n        <label>' +
 ((__t = (label_room_name)) == null ? '' : __t) +
-'"/>\n    <input type="text" name="nick" class="new-chatroom-nick"\n        placeholder="' +
+'</label>\n        <input type="text" name="chatroom" class="new-chatroom-name" placeholder="' +
+((__t = (label_room_name)) == null ? '' : __t) +
+'"/>\n        <label>' +
 ((__t = (label_nickname)) == null ? '' : __t) +
-'"/>\n    <input type="' +
-((__t = (server_input_type)) == null ? '' : __t) +
-'" name="server" class="new-chatroom-server"\n        placeholder="' +
-((__t = (label_server)) == null ? '' : __t) +
-'"/>\n    <input type="submit" name="join" value="' +
+'</label> <input type="text" name="nick" class="new-chatroom-nick" placeholder="' +
+((__t = (label_nickname)) == null ? '' : __t) +
+'"/>\n        <input type="submit" class="pure-button button-primary" name="join" value="' +
 ((__t = (label_join)) == null ? '' : __t) +
-'"/>\n    <input type="button" name="show" id="show-rooms" value="' +
+'"/>\n    </fieldset>\n    <fieldset>\n        ';
+ if (server_input_type != 'hidden') { ;
+__p += '\n            <label' +
+((__t = (server_label_global_attr)) == null ? '' : __t) +
+'>' +
+((__t = (label_server)) == null ? '' : __t) +
+'</label>\n        ';
+ } ;
+__p += '\n        <input type="' +
+((__t = (server_input_type)) == null ? '' : __t) +
+'" name="server" class="new-chatroom-server" placeholder="' +
+((__t = (label_server)) == null ? '' : __t) +
+'"/>\n        <input type="button" class="pure-button button-secondary" name="show" id="show-rooms" value="' +
 ((__t = (label_show_rooms)) == null ? '' : __t) +
-'"/>\n</form>\n<dl id="available-chatrooms"></dl>\n';
+'"/>\n    </fieldset>\n</form>\n<dl id="available-chatrooms"></dl>\n';
 
 }
 return __p
 };
 
-this["JST"]["roster"] = function(obj) {
+this["templates"]["roster"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<input class="roster-filter" placeholder="' +
+__p += '<form class="pure-form roster-filter-group input-button-group">\n    <input style="display: none;" class="roster-filter" placeholder="' +
 ((__t = (placeholder)) == null ? '' : __t) +
-'">\n<select class="filter-type">\n    <option value="contacts">' +
+'">\n    <select style="display: none;" class="filter-type">\n        <option value="contacts">' +
 ((__t = (label_contacts)) == null ? '' : __t) +
-'</option>\n    <option value="groups">' +
+'</option>\n        <option value="groups">' +
 ((__t = (label_groups)) == null ? '' : __t) +
-'</option>\n</select>\n<dl class="roster-contacts"></dl>\n';
+'</option>\n    </select>\n</form>\n';
 
 }
 return __p
 };
 
-this["JST"]["roster_item"] = function(obj) {
+this["templates"]["roster_item"] = function(obj) {
 obj || (obj = {});
-var __t, __p = '', __e = _.escape;
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
 with (obj) {
 __p += '<a class="open-chat" title="' +
+((__t = (title_fullname)) == null ? '' : __t) +
+': ' +
+((__t = (fullname)) == null ? '' : __t) +
+'\nJID: ' +
+((__t = (jid)) == null ? '' : __t) +
+'\n' +
 ((__t = (desc_chat)) == null ? '' : __t) +
 '" href="#"><span class="icon-' +
 ((__t = (chat_status)) == null ? '' : __t) +
@@ -684,15 +951,19 @@ __p += '<a class="open-chat" title="' +
 ((__t = (desc_status)) == null ? '' : __t) +
 '"></span>' +
 ((__t = (fullname)) == null ? '' : __t) +
-'</a>\n<a class="remove-xmpp-contact icon-remove" title="' +
+'</a>\n';
+ if (allow_contact_removal) { ;
+__p += '\n<a class="remove-xmpp-contact icon-remove" title="' +
 ((__t = (desc_remove)) == null ? '' : __t) +
 '" href="#"></a>\n';
+ } ;
+__p += '\n';
 
 }
 return __p
 };
 
-this["JST"]["search_contact"] = function(obj) {
+this["templates"]["search_contact"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
@@ -700,19 +971,24 @@ __p += '<li>\n    <form class="search-xmpp-contact">\n        <input type="text"
 ((__t = (label_contact_name)) == null ? '' : __t) +
 '"/>\n        <button type="submit">' +
 ((__t = (label_search)) == null ? '' : __t) +
-'</button>\n    </form>\n<li>\n';
+'</button>\n    </form>\n</li>\n';
 
 }
 return __p
 };
 
-this["JST"]["select_option"] = function(obj) {
+this["templates"]["select_option"] = function(obj) {
 obj || (obj = {});
-var __t, __p = '', __e = _.escape;
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
 with (obj) {
 __p += '<option value="' +
 ((__t = (value)) == null ? '' : __t) +
-'">' +
+'" ';
+ if (selected) { ;
+__p += ' selected="selected" ';
+ } ;
+__p += ' >' +
 ((__t = (label)) == null ? '' : __t) +
 '</option>\n';
 
@@ -720,7 +996,7 @@ __p += '<option value="' +
 return __p
 };
 
-this["JST"]["status_option"] = function(obj) {
+this["templates"]["status_option"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
@@ -738,7 +1014,7 @@ __p += '<li>\n    <a href="#" class="' +
 return __p
 };
 
-this["JST"]["toggle_chats"] = function(obj) {
+this["templates"]["toggle_chats"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -759,14 +1035,16 @@ __p += '\n    href="#">' +
 return __p
 };
 
-this["JST"]["toolbar"] = function(obj) {
+this["templates"]["toolbar"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
 with (obj) {
 
  if (show_emoticons)  { ;
-__p += '\n    <li class="toggle-smiley icon-happy" title="Insert a smilery">\n        <ul>\n            <li><a class="icon-smiley" href="#" data-emoticon=":)"></a></li>\n            <li><a class="icon-wink" href="#" data-emoticon=";)"></a></li>\n            <li><a class="icon-grin" href="#" data-emoticon=":D"></a></li>\n            <li><a class="icon-tongue" href="#" data-emoticon=":P"></a></li>\n            <li><a class="icon-cool" href="#" data-emoticon="8)"></a></li>\n            <li><a class="icon-evil" href="#" data-emoticon=">:)"></a></li>\n            <li><a class="icon-confused" href="#" data-emoticon=":S"></a></li>\n            <li><a class="icon-wondering" href="#" data-emoticon=":\\"></a></li>\n            <li><a class="icon-angry" href="#" data-emoticon=">:("></a></li>\n            <li><a class="icon-sad" href="#" data-emoticon=":("></a></li>\n            <li><a class="icon-shocked" href="#" data-emoticon=":O"></a></li>\n            <li><a class="icon-thumbs-up" href="#" data-emoticon="(^.^)b"></a></li>\n            <li><a class="icon-heart" href="#" data-emoticon="<3"></a></li>\n        </ul>\n    </li>\n';
+__p += '\n    <li class="toggle-smiley icon-happy" title="' +
+((__t = (label_insert_smiley)) == null ? '' : __t) +
+'">\n        <ul>\n            <li><a class="icon-smiley" href="#" data-emoticon=":)"></a></li>\n            <li><a class="icon-wink" href="#" data-emoticon=";)"></a></li>\n            <li><a class="icon-grin" href="#" data-emoticon=":D"></a></li>\n            <li><a class="icon-tongue" href="#" data-emoticon=":P"></a></li>\n            <li><a class="icon-cool" href="#" data-emoticon="8)"></a></li>\n            <li><a class="icon-evil" href="#" data-emoticon=">:)"></a></li>\n            <li><a class="icon-confused" href="#" data-emoticon=":S"></a></li>\n            <li><a class="icon-wondering" href="#" data-emoticon=":\\"></a></li>\n            <li><a class="icon-angry" href="#" data-emoticon=">:("></a></li>\n            <li><a class="icon-sad" href="#" data-emoticon=":("></a></li>\n            <li><a class="icon-shocked" href="#" data-emoticon=":O"></a></li>\n            <li><a class="icon-thumbs-up" href="#" data-emoticon="(^.^)b"></a></li>\n            <li><a class="icon-heart" href="#" data-emoticon="<3"></a></li>\n        </ul>\n    </li>\n';
  } ;
 __p += '\n';
  if (show_call_button)  { ;
@@ -775,9 +1053,9 @@ __p += '\n<li class="toggle-call"><a class="icon-phone" title="' +
 '"></a></li>\n';
  } ;
 __p += '\n';
- if (show_participants_toggle)  { ;
-__p += '\n<li class="toggle-participants"><a class="icon-hide-users" title="' +
-((__t = (label_hide_participants)) == null ? '' : __t) +
+ if (show_occupants_toggle)  { ;
+__p += '\n<li class="toggle-occupants"><a class="icon-hide-users" title="' +
+((__t = (label_hide_occupants)) == null ? '' : __t) +
 '"></a></li>\n';
  } ;
 __p += '\n';
@@ -787,6 +1065,17 @@ __p += '\n<li class="toggle-clear"><a class="icon-remove" title="' +
 '"></a></li>\n';
  } ;
 __p += '\n';
+
+}
+return __p
+};
+
+this["templates"]["toolbar_otr"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
+with (obj) {
+
  if (allow_otr)  { ;
 __p += '\n    <li class="toggle-otr ' +
 ((__t = (otr_status_class)) == null ? '' : __t) +
@@ -832,7 +1121,7 @@ __p += '\n               <li><a class="auth-otr" data-scheme="fingerprint" href=
 ((__t = (label_verify_with_fingerprints)) == null ? '' : __t) +
 '</a></li>\n            ';
  } ;
-__p += '\n            <li><a href="http://www.cypherpunks.ca/otr/help/3.2.0/levels.php" target="_blank">' +
+__p += '\n            <li><a href="http://www.cypherpunks.ca/otr/help/3.2.0/levels.php" target="_blank" rel="noopener">' +
 ((__t = (label_whats_this)) == null ? '' : __t) +
 '</a></li>\n        </ul>\n    </li>\n';
  } ;
@@ -842,12 +1131,12 @@ __p += '\n';
 return __p
 };
 
-this["JST"]["trimmed_chat"] = function(obj) {
+this["templates"]["trimmed_chat"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
 with (obj) {
-__p += '<a class="close-chatbox-button icon-close"></a>\n<a class="chat-head-message-count" \n    ';
+__p += '<a class="chatbox-btn close-chatbox-button icon-close"></a>\n<a class="chat-head-message-count" \n    ';
  if (!num_unread) { ;
 __p += ' style="display: none" ';
  } ;
@@ -858,6 +1147,22 @@ __p += '\n    href="#">' +
 '">\n    ' +
 ((__t = ( title )) == null ? '' : __t) +
 '\n</a>\n';
+
+}
+return __p
+};
+
+this["templates"]["vcard"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<form class="pure-form converse-form vcard-info">\n    <fieldset>\n        <legend>The VCard info gets rendered here</legend>\n        <label>Full name:</label>\n        ' +
+((__t = (fullname)) == null ? '' : __t) +
+'\n        <label>URL:</label>\n        ' +
+((__t = (url)) == null ? '' : __t) +
+'\n    </fieldset>\n    <fieldset>\n        <input type="button" class="pure-button button-cancel" value="' +
+((__t = (label_return)) == null ? '' : __t) +
+'"/>\n    </fieldset>\n</form>\n';
 
 }
 return __p
